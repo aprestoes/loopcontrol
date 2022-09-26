@@ -1,7 +1,6 @@
-<<<<<<< HEAD
+
 # loopcontrol
 Firefox/Chrome extension to loop specified sections of videos. (Otherwise known as Video Section Loop)
-=======
 # Loop Control (Video Section Loop)
 ## What does it do?
 This extension loops user-specified sections of videos. Instead of looping just from the end back to the beginning of the video, you can loop between any two points. Create a gif-like effect just within your browser!
@@ -21,4 +20,3 @@ Watching a cooking video/tricky guitar tutorial/play-of-the-game/awesome perform
 Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed) and the [Firefox fork](https://github.com/codebicycle/videospeed). It served as the inspiration for this project and its code is the foundation of this extension.
 
 Icons are [Firefox Photon Icons](https://github.com/FirefoxUX/photon-icons).
->>>>>>> 183f44d (Initial initial commit)
