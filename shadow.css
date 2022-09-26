@@ -1,0 +1,107 @@
+* {
+  line-height: 1.9em;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+:host(:hover) #controls {
+  display: inline;
+}
+
+#controller {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background: black;
+  color: white;
+
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px 10px 10px 15px;
+
+  cursor: default;
+  z-index: 9999999;
+}
+
+#controller:hover {
+  opacity: 0.7;
+}
+
+#controller:hover > .draggable {
+  margin-right: 0.8em;
+}
+
+#controls {
+  display: none;
+}
+
+#controller.dragging {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  opacity: 0.7;
+}
+
+#controller.dragging #controls {
+  display: inline;
+}
+
+.draggable {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.draggable:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
+
+button {
+  cursor: pointer;
+  color: black;
+  background: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 3px 6px 3px 6px;
+  font-size: 14px;
+  line-height: 14px;
+  border: 1px solid white;
+  font-family: "Lucida Console", Monaco, monospace;
+  margin-bottom: 2px;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:hover {
+  opacity: 1;
+}
+
+button:active {
+  background: #ccc;
+}
+
+button.rw {
+  opacity: 0.65;
+}
+
+button.hideButton {
+  opacity: 0.65;
+  margin-right: 2px;
+}
+
+input {
+  cursor: pointer;
+  color: black;
+  background: #ccc;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 3px 6px 3px 6px;
+  font-size: 14px;
+  line-height: 14px;
+  border: 1px solid white;
+  font-family: "Lucida Console", Monaco, monospace;
+  margin-bottom: 2px;
+  width: 40px;
+}
