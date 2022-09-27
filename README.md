@@ -7,13 +7,19 @@ Watching a cooking video/tricky guitar tutorial/play-of-the-game/awesome perform
 
 ## To-do
 - [ ] Implement options page and settings
-- [ ] On toggle off, remove event listener instead of checking for lc.settings.enabled in event listener
-- [ ] Fix issue with constant buffering when section loop is short (<1 seconds)
+- [x] On toggle off, remove event listener instead of checking for lc.settings.enabled in event listener
+- [x] Fix issue with constant buffering when section loop is short (<1 seconds) (Restrict sections <1 secs for now?) -> Issue was with using Math.floor for times instead of the exact times. Exact behaviour *may* differ depending on browser
 - [ ] Implement hide controller
-- [ ] Default loop start and end times
-- [ ] Keybindings
-- [ ] .addEventListener does not override current listeners, must manually remove them on toggle
+- [ ] Setting for default loop start and end times
+- [ ] Keybindings. Q and E to set start and end times.
+- [x] .addEventListener does not override current listeners, must manually remove them on toggle (Toggle off currently not removing listener)
+- [ ] In some cases, cannot toggle loop, or loop continues even when toggled off
+- [ ] In some cases, video loops a section a few times, then goes back to video start
 - [ ] Set loop flag?
+- [ ] Youtube: on load, end indicator shown as NaN
+- [ ] Remember video loop times
+- [ ] Switch to browser.* namespace for Firefox extension and chrome.* for Chrome
+- [ ] Switch to Manifest v3 once Firefox Stable implements it
 
 ## Installation
 ### Firefox Temporary Add-on (For testing purposes)

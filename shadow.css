@@ -49,6 +49,7 @@
 .draggable {
   cursor: -webkit-grab;
   cursor: -moz-grab;
+  user-select: none;
 }
 
 .draggable:active {

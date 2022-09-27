@@ -1,17 +1,16 @@
 {
 
   "manifest_version": 2,
-  "name": "Video Section Loop",
+  "name": "VSL",
   "version": "0.1",
-
   "description": "Loops a specific section of a video",
 
-  "permissions": [
-    "storage"
-  ],
+  "homepage_url": "https://github.com/aprestoes/loopcontrol",
+
+  "permissions": ["storage"],
 
   "icons": {
-    "48": "icons/vsl-48.png"
+    "32": "icons/icon-32.png"
   },
 
   "content_scripts": [
@@ -38,5 +37,5 @@
     }],
     "default_popup": "popup.html"
   },
-  "web_accessible_resources": ["inject.css", "shadow.css", "icons/repeat.svg", "xmark.svg"]
+  "web_accessible_resources": ["inject.css", "shadow.css"]
 }
