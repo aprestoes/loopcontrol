@@ -98,6 +98,7 @@ function defineVideoController() {
         }
 
         lc.startTimes[target.currentSrc] = 0;
+        //FIXME: On Chrome, duration is sometimes NaN. Check for loadedmetadata
         lc.endTimes[target.currentSrc] = target.duration;
 
         //Default start and end time
@@ -442,12 +443,24 @@ function toggleLoop(video) {
 
 //Function will be binded to video when called so this.handleLoop can be used for removeEventListener
 function setLoop(video, loopStart, loopEnd) {
+    let startIndicator = video.vsl.startIndicator;
+    let endIndicator = video.vsl.endIndicator;
+
+    //If loop start is before loop end, it messes with section loop. So switch values
+    if (loopStart > loopEnd) { 
+        log("Loop end cannot be before loop start. Swapping values.", 2);
+        let temp = loopStart;
+        loopStart = loopEnd;
+        loopEnd = temp;
+    } else if (loopStart === loopEnd) { //If target times are exact same (before rounding)
+        //TODO: visible error message in controller
+        log("Loop start cannot be the exact same time as loop end", 2);
+        return;
+    }
+    
     log("Setting loop from " + loopStart + " to " + loopEnd, 3);
     lc.startTimes[video.currentSrc] = loopStart;
     lc.endTimes[video.currentSrc] = loopEnd;
-
-    var startIndicator = video.vsl.startIndicator;
-    var endIndicator = video.vsl.endIndicator;
 
     if (lc.settings.inSeconds) {
         startIndicator.textContent = Math.round(loopStart);
