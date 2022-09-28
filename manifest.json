@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "VSL",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "Loops a specific section of a video",
 
   "homepage_url": "https://github.com/aprestoes/loopcontrol",
@@ -18,7 +18,14 @@
       "all_frames": true,
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "js": ["vsl.js"],
-      "match_about_blank": true
+      "css": ["inject.css"],
+      "match_about_blank": true,
+      "exclude_matches": [
+        "https://plus.google.com/hangouts/*",
+         "https://www.google.com/flights/*",
+         "https://hangouts.google.com/*",
+         "https://meet.google.com/*"
+      ]
     }
   ],
   "browser_action": {
