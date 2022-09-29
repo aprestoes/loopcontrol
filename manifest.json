@@ -28,6 +28,7 @@
       ]
     }
   ],
+
   "browser_action": {
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -44,5 +45,12 @@
     }],
     "default_popup": "popup.html"
   },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "addon@example.com"
+    }
+  },
+
   "web_accessible_resources": ["inject.css", "shadow.css"]
 }

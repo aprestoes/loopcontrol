@@ -8,7 +8,9 @@ var lc = {
         startHidden: false,
         inSeconds: true, //Display labels in seconds or in MM:SS format
         enabled: true,
-        controllerOpacity: 0.7 //Default 0.7
+        controllerOpacity: 0.7, //Default 0.7
+        keyBindings: [],
+        version: 0.01,
         //TODO: add blacklist, was previously throwing errors
     },
 
@@ -18,7 +20,7 @@ var lc = {
     loopsEnabled: [], //
 
     // Holds a reference to all of the AUDIO/VIDEO DOM elements we've attached to
-    mediaElements: []
+    mediaElements: [],
 };
 
 /* Log Levels:
@@ -51,7 +53,7 @@ function runAction(action, value, e) {
         var targetController = e.target.getRootNode().host;
     }
 
-    lc.mediaElements.forEach(function(v) {
+    lc.mediaElements.forEach(function (v) {
         var controller = v.vsl.div;
 
         if (e && !(targetController == controller)) {
@@ -79,7 +81,7 @@ function runAction(action, value, e) {
 //Mostly from VSC
 function defineVideoController() {
     log("Defining video controller", 4);
-    lc.videoController = function(target, parent) {
+    lc.videoController = function (target, parent) {
         log("Creating new video controller", 4);
         if (target.vsl) {
             return target.vsl;
@@ -103,7 +105,13 @@ function defineVideoController() {
 
         //Default start and end time
 
-        log("Loop time set to default: " + lc.startTimes[target.currentSrc] + " to " + lc.endTimes[target.currentSrc], 3);
+        log(
+            "Loop time set to default: " +
+                lc.startTimes[target.currentSrc] +
+                " to " +
+                lc.endTimes[target.currentSrc],
+            3
+        );
 
         this.div = this.initControls();
 
@@ -128,11 +136,11 @@ function defineVideoController() {
             });
         });
         observer.observe(target, {
-            attributeFilter: ["src", "currentSrc"]
+            attributeFilter: ["src", "currentSrc"],
         });
     };
 
-    lc.videoController.prototype.remove = function() {
+    lc.videoController.prototype.remove = function () {
         this.div.remove();
         this.video.removeEventListener("timeupdate", lc.handleLoop);
         this.video.loop = false;
@@ -158,7 +166,7 @@ function defineVideoController() {
         }
     };
 
-    lc.videoController.prototype.initControls = function() {
+    lc.videoController.prototype.initControls = function () {
         log("Initializing controls", 4);
         const document = this.video.ownerDocument;
 
@@ -178,13 +186,15 @@ function defineVideoController() {
         }
 
         var shadow = wrapper.attachShadow({
-            mode: "open"
+            mode: "open",
         });
         var shadowTemplate = `
         <style>
             @import "${chrome.runtime.getURL("shadow.css")}";
           </style>
-        <div id="controller" style="top:${top}; left:${left}; opacity:${lc.settings.controllerOpacity}">
+        <div id="controller" style="top:${top}; left:${left}; opacity:${
+            lc.settings.controllerOpacity
+        }">
             <span data-action="drag" class="draggable drag-indicator">ON</span>
             <span id="controls">
                 <button class="start-indicator rw" data-action="set-start">Start</button>
@@ -198,7 +208,8 @@ function defineVideoController() {
         `;
 
         shadow.innerHTML = shadowTemplate;
-        shadow.querySelector(".draggable").addEventListener("mousedown",
+        shadow.querySelector(".draggable").addEventListener(
+            "mousedown",
             (e) => {
                 runAction(e.target.dataset["action"], false, e);
                 e.stopPropagation();
@@ -206,8 +217,9 @@ function defineVideoController() {
             true
         );
 
-        shadow.querySelectorAll("button").forEach(function(button) {
-            button.addEventListener("click",
+        shadow.querySelectorAll("button").forEach(function (button) {
+            button.addEventListener(
+                "click",
                 (e) => {
                     runAction(e.target.dataset["action"], false, e);
                     e.stopPropagation();
@@ -215,7 +227,6 @@ function defineVideoController() {
                 true
             );
         });
-
 
         shadow
             .querySelector("#controller")
@@ -252,20 +263,24 @@ function defineVideoController() {
                 // this is a monstrosity but new FB design does not have *any*
                 // semantic handles for us to traverse the tree, and deep nesting
                 // that we need to bubble up from to get controller to stack correctly
-                let p = this.parent.parentElement.parentElement.parentElement
-                    .parentElement.parentElement.parentElement.parentElement;
+                let p =
+                    this.parent.parentElement.parentElement.parentElement
+                        .parentElement.parentElement.parentElement
+                        .parentElement;
                 p.insertBefore(fragment, p.firstChild);
                 break;
             case location.hostname == "tv.apple.com":
                 // insert after parent for correct stacking context
-                this.parent.getRootNode().querySelector(".scrim").prepend(fragment);
+                this.parent
+                    .getRootNode()
+                    .querySelector(".scrim")
+                    .prepend(fragment);
             default:
                 // Note: when triggered via a MutationRecord, it's possible that the
                 // target is not the immediate parent. This appends the controller as
                 // the first element of the target, which may not be the parent.
                 this.parent.insertBefore(fragment, this.parent.firstChild);
         }
-
 
         log("Finished initializing controls", 4);
         return wrapper;
@@ -329,49 +344,62 @@ function initNow(document) {
         }
     } catch (e) {}
 
-    var observer = new MutationObserver(function(mutations) {
+    var observer = new MutationObserver(function (mutations) {
         // Process the DOM nodes lazily
         requestIdleCallback(
             (_) => {
-                mutations.forEach(function(mutation) {
+                mutations.forEach(function (mutation) {
                     switch (mutation.type) {
                         case "childList":
-                            mutation.addedNodes.forEach(function(node) {
+                            mutation.addedNodes.forEach(function (node) {
                                 if (typeof node === "function") return;
-                                checkForVideo(node, node.parentNode || mutation.target, true);
+                                checkForVideo(
+                                    node,
+                                    node.parentNode || mutation.target,
+                                    true
+                                );
                             });
-                            mutation.removedNodes.forEach(function(node) {
+                            mutation.removedNodes.forEach(function (node) {
                                 if (typeof node === "function") return;
-                                checkForVideo(node, node.parentNode || mutation.target, false);
+                                checkForVideo(
+                                    node,
+                                    node.parentNode || mutation.target,
+                                    false
+                                );
                             });
                             break;
                         case "attributes":
                             if (
                                 mutation.target.attributes["aria-hidden"] &&
-                                mutation.target.attributes["aria-hidden"].value == "false"
+                                mutation.target.attributes["aria-hidden"]
+                                    .value == "false"
                             ) {
                                 var flattenedNodes = getShadow(document.body);
                                 var node = flattenedNodes.filter(
                                     (x) => x.tagName == "VIDEO"
                                 )[0];
                                 if (node) {
-                                    if (node.vsl)
-                                        node.vsl.remove();
-                                    checkForVideo(node, node.parentNode || mutation.target, true);
+                                    if (node.vsl) node.vsl.remove();
+                                    checkForVideo(
+                                        node,
+                                        node.parentNode || mutation.target,
+                                        true
+                                    );
                                 }
                             }
                             break;
                     }
                 });
-            }, {
-                timeout: 1000
+            },
+            {
+                timeout: 1000,
             }
         );
     });
     observer.observe(document, {
         attributeFilter: ["aria-hidden"],
         childList: true,
-        subtree: true
+        subtree: true,
     });
 
     var mediaTags;
@@ -381,13 +409,13 @@ function initNow(document) {
         mediaTags = document.querySelectorAll("video");
     }
 
-    mediaTags.forEach(function(video) {
+    mediaTags.forEach(function (video) {
         video.vsl = new lc.videoController(video);
     });
 
     //Loop through iframes and initialize as well
     var frameTags = document.getElementsByTagName("iframe");
-    Array.prototype.forEach.call(frameTags, function(frame) {
+    Array.prototype.forEach.call(frameTags, function (frame) {
         // Ignore frames we don't have permission to access (different origin).
         try {
             var childDocument = frame.contentDocument;
@@ -396,7 +424,6 @@ function initNow(document) {
         }
         initWhenReady(childDocument);
     });
-
 }
 
 //The function to be run. Initializes everything
@@ -406,7 +433,7 @@ function initWhenReady(document) {
       return;
     }*/
 
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
         initNow(window.document);
     });
 
@@ -447,17 +474,18 @@ function setLoop(video, loopStart, loopEnd) {
     let endIndicator = video.vsl.endIndicator;
 
     //If loop start is before loop end, it messes with section loop. So switch values
-    if (loopStart > loopEnd) { 
+    if (loopStart > loopEnd) {
         log("Loop end cannot be before loop start. Swapping values.", 2);
         let temp = loopStart;
         loopStart = loopEnd;
         loopEnd = temp;
-    } else if (loopStart === loopEnd) { //If target times are exact same (before rounding)
+    } else if (loopStart === loopEnd) {
+        //If target times are exact same (before rounding)
         //TODO: visible error message in controller
         log("Loop start cannot be the exact same time as loop end", 2);
         return;
     }
-    
+
     log("Setting loop from " + loopStart + " to " + loopEnd, 3);
     lc.startTimes[video.currentSrc] = loopStart;
     lc.endTimes[video.currentSrc] = loopEnd;
@@ -466,16 +494,19 @@ function setLoop(video, loopStart, loopEnd) {
         startIndicator.textContent = Math.round(loopStart);
         endIndicator.textContent = Math.round(loopEnd);
     } else {
-        startIndicator.textContent = convertSecToMin(loopStart);
-        endIndicator.textContent = convertSecToMin(loopEnd);
+        startIndicator.textContent = convertSecToMin(Math.round(loopStart));
+        endIndicator.textContent = convertSecToMin(Math.round(loopEnd));
     }
 
     //Check if enabled before adding listener
     if (lc.loopsEnabled[video.currentSrc]) {
-        video.addEventListener("timeupdate", (lc.handleLoop = checkTime.bind(video)));
+        video.addEventListener(
+            "timeupdate",
+            (lc.handleLoop = checkTime.bind(video))
+        );
 
         //Use loop tag instead of load() and play()
-        video.loop = true;        
+        video.loop = true;
     }
 }
 
@@ -486,7 +517,10 @@ function checkTime() {
     if (!lc.loopsEnabled[video.currentSrc]) {
         video.removeEventListener("timeupdate", lc.handleLoop);
         video.loop = false;
-    } else if (video.currentTime >= lc.endTimes[video.currentSrc] || video.currentTime < lc.startTimes[video.currentSrc]) {
+    } else if (
+        video.currentTime >= lc.endTimes[video.currentSrc] ||
+        video.currentTime < lc.startTimes[video.currentSrc]
+    ) {
         video.currentTime = lc.startTimes[video.currentSrc];
     }
     /*if (lc.loopsEnabled[video.currentSrc]) {
@@ -498,7 +532,6 @@ function checkTime() {
 
     //}
 }
-
 
 //Helper functions
 
@@ -523,7 +556,7 @@ function handleDrag(video, e) {
     const initialMouseXY = [e.clientX, e.clientY];
     const initialControllerXY = [
         parseInt(shadowController.style.left),
-        parseInt(shadowController.style.top)
+        parseInt(shadowController.style.top),
     ];
 
     const startDragging = (e) => {
@@ -604,36 +637,84 @@ function getShadow(parent) {
     return result.flat(Infinity);
 }
 
-function convertSecToMin(timeInSecs) { //TODO: implement seconds to minutes
-    //simple math
-    let minutes = Math.floor(Number(timeInSecs) / 60);
-    let seconds = Number(timeInSecs) - (minutes * 60);
+function convertSecToMin(timeInSecs) {
+    //TODO: implement seconds to minutes
+    let tempDate = new Date(null);
+    tempDate.setSeconds(timeInSecs);
 
-    return `${minutes.toString()}:${seconds.toString()}`;
+    if (timeInSecs >= 3600) {
+        //If over 1 hour, display hours in string
+        return tempDate.toISOString().substring(11, 19);
+    } else {
+        return tempDate.toISOString().substring(14, 19);
+    }
 }
 
 //Actually start now //TODO: implement loading settings
-/*chrome.storage.sync.get(lc.settings, function(storage) {
-      //If settings not already set, i.e. first run
-      if (storage.enabled === 'undefined') {
-          log("First run, initializing settings", 3);
-          chrome.storage.sync.set({
-              audioEnabled: lc.settings.audioEnabled, //Enable for audio as well as video. Default: true
-              loopEverything: lc.settings.loopEverything, //Automatically loop all videos. Default: false
-              enabled: lc.settings.enabled,
-              controllerOpacity: lc.settings.controllerOpacity, //Default 0.7
-              //blacklist: lc.settings.blacklist.replace(lc.regStrip, "")
-            });
-      }
-  
-      //Restore settings
-      lc.settings.audioEnabled = Boolean(storage.audioEnabled);
-      lc.settings.loopEverything = Boolean(storage.loopEverything);
-      lc.settings.enabled = Boolean(storage.enabled);
-      lc.settings.controllerOpacity = Number(storage.controllerOpacity);
-      //lc.settings.blacklist = String(storage.blacklist);
-  
-      initWhenReady(document);
-});*/
+//TODO: storage access requires an add-on ID, not temporary add-on ID. See https://mzl.la/3lPk1aE
+chrome.storage.sync.get(lc.settings, function (storage) {
+    lc.settings.keyBindings = storage.keyBindings; // Array
 
-initWhenReady(document);
+    /*  DEFAULT KEYBINDINGS
+        Q - Set start time
+        E - Set end time
+        W - Toggle loop
+        H - Hide
+    */
+
+    if (storage.keyBindings.length == 0) {
+        lc.settings.keyBindings.push({
+            action: "set-start",
+            key: Number(storage.setStartKeyCode) || 81,
+            value: 1,
+            force: false,
+            predefined: true,
+        }); // default: Q
+        lc.settings.keyBindings.push({
+            action: "set-end",
+            key: Number(storage.setEndKeyCode) || 69,
+            value: 1,
+            force: false,
+            predefined: true,
+        }); // default: E
+        lc.settings.keyBindings.push({
+            action: "toggle-loop",
+            key: Number(storage.toggleKeyCode) || 87,
+            value: 1,
+            force: false,
+            predefined: true,
+        }); // default: W
+        lc.settings.keyBindings.push({
+            action: "toggle-controller", //Show/hide controller
+            key: Number(storage.setEndKeyCode) || 72,
+            value: 1,
+            force: false,
+            predefined: true,
+        }); // default: H
+
+        chrome.storage.sync.set({
+            keyBindings: lc.settings.keyBindings,
+            version: lc.settings.version,
+            loopEverything: lc.settings.loopEverything,
+            inSeconds: lc.settings.inSeconds,
+            audioBoolean: lc.settings.audioBoolean,
+            startHidden: lc.settings.startHidden,
+            enabled: lc.settings.enabled,
+            controllerOpacity: lc.settings.controllerOpacity,
+            inSeconds: lc.settings.inSeconds,
+            //blacklist: lc.settings.blacklist.replace(regStrip, ""),
+        });
+    }
+    lc.settings.rememberSpeed = Boolean(storage.rememberSpeed);
+    lc.settings.audioEnabled = Boolean(storage.audioBoolean);
+    lc.settings.enabled = Boolean(storage.enabled);
+    lc.settings.startHidden = Boolean(storage.startHidden);
+    lc.settings.controllerOpacity = Number(storage.controllerOpacity);
+    //lc.settings.blacklist = String(storage.blacklist);
+    lc.settings.loopEverything = Boolean(storage.loopEverything);
+    lc.settings.inSeconds = Boolean(storage.inSettings);
+
+    initWhenReady(document);
+});
+
+//initWhenReady(document);
