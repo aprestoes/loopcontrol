@@ -1,7 +1,7 @@
 {
 
   "manifest_version": 2,
-  "name": "VSL",
+  "name": "LoopControl",
   "version": "0.0.1",
   "description": "Loops a specific section of a video",
 
@@ -11,6 +11,11 @@
 
   "icons": {
     "32": "icons/icon-32.png"
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
 
   "content_scripts": [

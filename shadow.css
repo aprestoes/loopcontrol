@@ -8,6 +8,10 @@
   display: inline;
 }
 
+.blinked-controls {
+  display: inline !important;
+}
+
 #controller {
   position: absolute;
   top: 0;
@@ -83,11 +87,7 @@ button:active {
   background: #ccc;
 }
 
-button.rw {
-  opacity: 0.65;
-}
-
-button.hideButton {
+button.hide-button {
   opacity: 0.65;
   margin-right: 2px;
 }
