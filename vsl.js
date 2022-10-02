@@ -4,7 +4,7 @@ var regEndsWithFlags = /\/(?!.*(.).*\1)[gimsuy]*$/;
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
     settings: {
-        logLevel: 4, //See log function below. Default: 2
+        logLevel: 2, //See log function below. Default: 2
         audioEnabled: false, //Enable for audio as well as video. Default: true
         //loopEverything: false, //FIXME: Automatically loop all videos. Default: false
         startHidden: false,
@@ -59,8 +59,6 @@ function log(message, logLevel = 5) {
 }
 
 function runAction(action, value, e) {
-    console.log(e);
-    //FIXME: Error when using keys when video not selected
     if (e) {
         //Set correct target depending on click or keypress
         var targetController = value ? value.div : e.target.getRootNode().host; //If keydown use lastInteracted
@@ -72,8 +70,6 @@ function runAction(action, value, e) {
         if (e && !(targetController == controller)) {
             return;
         }
-
-        console.log(targetController);
 
         if (!v.classList.contains("vsl-cancelled")) {
             if (action === "blink") {
@@ -817,7 +813,6 @@ function tempShowController(controller) {
             "#controller #controls"
         )
         .classList.toggle("blinked-controls");
-    console.log(controller);
     controller.blinkTimeOut = setTimeout(() => {
         if (wasHidden) controller.classList.add("vsl-hidden"); //Make it hide again
         controller.blinkTimeOut = undefined;
