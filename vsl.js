@@ -486,8 +486,8 @@ function initNow(document) {
         video.vsl = new lc.videoController(video);
     });
 
-    if (mediaTags > 0) {
-        lc.lastInteracted = mediaTags[0];
+    if (mediaTags.length > 0) {
+        lc.lastInteracted = mediaTags[0].vsl;
     }
 
     //Loop through iframes and initialize as well
