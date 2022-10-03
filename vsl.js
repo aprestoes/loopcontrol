@@ -12,7 +12,7 @@ var lc = {
         enabled: true,
         controllerOpacity: 0.7, //Default 0.7
         keyBindings: [],
-        version: 0.01,
+        //version: "0.0.1",
         blacklist: `\
             www.instagram.com
             twitter.com
@@ -106,19 +106,6 @@ function runAction(action, value, e) {
             }
         }
     });
-}
-
-//Keybindings
-function getKeyBindings(action, what = "value") {
-    try {
-        return lc.settings.keyBindings.find((item) => item.action === action)[what];
-    } catch (e) {
-        return false;
-    }
-}
-
-function setKeyBindings(action, value) {
-    lc.settings.keyBindings.find((item) => item.action === action)["value"] = value;
 }
 
 function defineVideoController() {
@@ -259,11 +246,7 @@ function defineVideoController() {
             button.addEventListener(
                 "click",
                 (e) => {
-                    runAction(
-                        e.target.dataset["action"],
-                        getKeyBindings(e.target.dataset["action"]),
-                        e
-                    );
+                    runAction(e.target.dataset["action"], null, e);
                     e.stopPropagation();
                 },
                 true
@@ -374,7 +357,6 @@ function initNow(document) {
         }
     } catch (e) {}
 
-    //FIXME: Implement keybindings
     docs.forEach(function (doc) {
         //doc.querySelector("#vsl-controller").forEach(());
         doc.addEventListener(
@@ -549,7 +531,7 @@ function initWhenReady(document) {
 function setStart(video, loopStart) {
     let src = video.currentSrc;
 
-    if (isNaN(loopStart)) {
+    if (isNaN(loopStart) || (video.duration && loopStart === video.duration)) {
         log("Invalid start time", 2);
         resetStart(video);
         return;
@@ -866,7 +848,7 @@ chrome.storage.sync.get(lc.settings, function (storage) {
 
         chrome.storage.sync.set({
             keyBindings: lc.settings.keyBindings,
-            version: lc.settings.version,
+            //version: lc.settings.version,
             //loopEverything: lc.settings.loopEverything,
             inSeconds: lc.settings.inSeconds,
             audioEnabled: lc.settings.audioEnabled,
