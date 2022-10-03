@@ -12,6 +12,8 @@ Watching a cooking video/tricky guitar tutorial/play-of-the-game/awesome perform
 
 All HTML5 videos will display a moveable and hideable controller that indicates if loops are currently toggled on or off. Here you can set the start and end times of the sections you want to loop.
 
+![Section Loop Guitar Example](https://i.giphy.com/dBkYAjneYGxFI0wYkT.gif)
+
 You can also manually toggle LoopControl by right-clicking the video and selecting loop.
 
 Default Keybindings (targets the last video controller you interacted with):
