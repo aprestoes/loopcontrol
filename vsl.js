@@ -214,7 +214,7 @@ function defineVideoController() {
         var shadowTemplate = `
         <style>
             @import "${chrome.runtime.getURL("shadow.css")}";
-          </style>
+        </style>
         <div id="controller" style="top:${top}; left:${left}; opacity:${
             lc.settings.controllerOpacity
         }">

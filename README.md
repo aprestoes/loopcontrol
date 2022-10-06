@@ -24,6 +24,10 @@ H - Hide controller
 
 ## Installation
 
+### Install from Addons.Mozilla.Org (AMO)
+
+Install through the official Firefox Add-ons Web Store [link](https://addons.mozilla.org/en-CA/firefox/addon/loopcontrol/).
+
 ### Firefox Temporary Add-on (For testing purposes)
 
 1. Download this repo as a .zip file
@@ -43,22 +47,7 @@ H - Hide controller
 
 ## To-do
 
--   [x] Implement options page and settings
--   [x] On toggle off, remove event listener instead of checking for lc.settings.enabled in event listener
--   [x] Fix issue with constant buffering when section loop is short (<1 seconds) (Restrict sections <1 secs for now?) -> Issue was with using Math.floor for times instead of the exact times. Exact behaviour _may_ differ depending on browser
--   [x] Implement hide controller
--   [ ] Setting for default loop start and end times
--   [x] Keybindings. Q and E to set start and end times.
--   [x] .addEventListener does not override current listeners, must manually remove them on toggle (Toggle off currently not removing listener)
--   [x] In some cases, cannot toggle loop, or loop continues even when toggled off
--   [x] In some cases, video loops a section a few times, then goes back to video start
--   [x] Set loop flag?
--   [x] Make separate setStart() and setEnd() functions
--   [x] Check if user sets/removes loop flag
--   [x] Youtube: on load, end indicator shown as NaN -> .addEventListener("loadedmetadata", ...)
--   [ ] Use intervals instead of event listener?
 -   [ ] Remember video loop times
--   [ ] Switch to browser._ namespace for Firefox extension and chrome._ for Chrome
 -   [ ] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
 
 ## Credit
@@ -66,3 +55,5 @@ H - Hide controller
 Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed), the [Firefox fork](https://github.com/codebicycle/videospeed) (seemingly abandoned) and the more updated [gediminasel fork](https://github.com/gediminasel/videospeed-firefox) with a few helpful fixes. It served as the inspiration for this project and its code is the foundation of this extension.
 
 <a href="https://www.flaticon.com/free-icons/update" title="update icons">Extension icon created by Pixel perfect - Flaticon</a>
+
+Mockup assets used in extension listings from [MockupDen](https://mockupden.com) and [Shaping Rain](https://shapingrain.com)
