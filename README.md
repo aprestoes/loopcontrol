@@ -2,7 +2,7 @@
 
 ## What does it do?
 
-This extension loops user-specified sections of videos. Instead of looping just from the end back to the beginning of the video, you can loop between any two points. Create a gif-like effect just within your browser!
+This extension loops user-specified sections of videos AND audio (enabled in settings). Instead of looping just from the end back to the beginning of the video, you can loop between any two points. Create a gif-like effect just within your browser!
 
 ## Why?
 
@@ -36,23 +36,10 @@ H - Hide controller
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. Open the file, `manifest.json` and delete the following key:
-
-```
-"browser_specific_settings": {
-    "gecko": {
-      "id": "addon@example.com"
-    }
-  },
-```
-
-(It should still run even with it, but it may throw a warning in the Dev Tools about an unrecognized key, as it is specifically for Firefox)
-
-4. Save the file
-5. In Chrome, go to `chrome://extensions`
-6. Enable Developer Mode in the top-right
-7. Click 'Load unpacked extension...'
-8. Select the `loopcontrol-main` folder
+3. In Chrome, go to `chrome://extensions`
+4. Enable Developer Mode in the top-right
+5. Click 'Load unpacked extension...'
+6. Select the `loopcontrol-main` folder
 
 ## To-do
 
@@ -78,4 +65,4 @@ H - Hide controller
 
 Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed), the [Firefox fork](https://github.com/codebicycle/videospeed) (seemingly abandoned) and the more updated [gediminasel fork](https://github.com/gediminasel/videospeed-firefox) with a few helpful fixes. It served as the inspiration for this project and its code is the foundation of this extension.
 
-Icons are [Firefox Photon Icons](https://github.com/FirefoxUX/photon-icons).
+<a href="https://www.flaticon.com/free-icons/update" title="update icons">Extension icon created by Pixel perfect - Flaticon</a>

@@ -2,8 +2,8 @@
 
   "manifest_version": 2,
   "name": "LoopControl",
-  "version": "0.0.1",
-  "description": "Loops a specific section of a video",
+  "version": "0.1.0",
+  "description": "Loop specific sections of videos.",
 
   "homepage_url": "https://github.com/aprestoes/loopcontrol",
 
@@ -39,15 +39,6 @@
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     },
-    "theme_icons": [{
-      "light": "icons/icon-16-light.png",
-      "dark": "icons/icon-16.png",
-      "size": 16
-    }, {
-      "light": "icons/icon-32-light.png",
-      "dark": "icons/icon-32.png",
-      "size": 32
-    }],
     "default_popup": "popup.html"
   },
 
