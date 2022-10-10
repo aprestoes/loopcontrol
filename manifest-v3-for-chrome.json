@@ -1,0 +1,52 @@
+{
+
+    "manifest_version": 3,
+    "name": "LoopControl",
+    "version": "0.1.0",
+    "description": "Loop specific sections of videos.",
+  
+    "homepage_url": "https://github.com/aprestoes/loopcontrol",
+  
+    "permissions": ["storage"],
+  
+    "icons": {
+      "32": "icons/icon-32.png"
+    },
+  
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": true
+    },
+  
+    "content_scripts": [
+      {
+        "all_frames": true,
+        "matches": ["http://*/*", "https://*/*", "file:///*"],
+        "js": ["vsl.js"],
+        "css": ["inject.css"],
+        "match_about_blank": true,
+        "exclude_matches": [
+          "https://plus.google.com/hangouts/*",
+           "https://www.google.com/flights/*",
+           "https://hangouts.google.com/*",
+           "https://meet.google.com/*"
+        ]
+      }
+    ],
+  
+    "action": {
+      "default_icon": {
+        "16": "icons/icon-16.png",
+        "32": "icons/icon-32.png"
+      },
+      "default_popup": "popup.html"
+    },
+    
+  
+    "web_accessible_resources": [
+      {
+        "resources": ["inject.css", "shadow.css"],
+        "matches": ["<all_urls>"]
+      }
+    ]
+  }

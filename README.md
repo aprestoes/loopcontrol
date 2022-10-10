@@ -40,10 +40,12 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. In Chrome, go to `chrome://extensions`
-4. Enable Developer Mode in the top-right
-5. Click 'Load unpacked extension...'
-6. Select the `loopcontrol-main` folder
+3. Delete the file `manifest.json`
+4. Rename `manifest-v3-for-chrome.json` to `manifest.json`
+5. In Chrome, go to `chrome://extensions`
+6. Enable Developer Mode in the top-right
+7. Click 'Load unpacked extension...'
+8. Select the `loopcontrol-main` folder
 
 ## To-do
 
