@@ -1,5 +1,7 @@
 var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;
 var regEndsWithFlags = /\/(?!.*(.).*\1)[gimsuy]*$/;
+const isChrome = window.chrome ? true : false;
+//Chrome uses chrome namespace, Firefox/Edge uses browser.
 
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
@@ -211,13 +213,16 @@ function defineVideoController() {
         var shadow = wrapper.attachShadow({
             mode: "open",
         });
+
+        var shadowURL = isChrome
+            ? chrome.runtime.getURL("shadow.css")
+            : browser.runtime.getURL("shadow.css");
+
         var shadowTemplate = `
         <style>
-            @import "${chrome.runtime.getURL("shadow.css")}";
+            @import "${shadowURL}";
         </style>
-        <div id="controller" style="top:${top}; left:${left}; opacity:${
-            lc.settings.controllerOpacity
-        }">
+        <div id="controller" style="top:${top}; left:${left}; opacity:${lc.settings.controllerOpacity}">
             <span data-action="drag" class="draggable drag-indicator">OFF</span>
             <span id="controls">
                 <button id="start-indicator" class="rw" data-action="set-start">Start</button>
@@ -344,7 +349,10 @@ function initNow(document) {
         defineVideoController();
     } else {
         var link = document.createElement("link");
-        link.href = chrome.runtime.getURL("inject.css");
+        var injectLink = isChrome
+            ? chrome.runtime.getURL("inject.css")
+            : browser.runtime.getURL("inject.css");
+        link.href = injectLink;
         link.type = "text/css";
         link.rel = "stylesheet";
         document.head.appendChild(link);
@@ -804,14 +812,14 @@ function tempShowController(controller) {
     }, 500);
 }
 
-//Actually start now
-chrome.storage.sync.get(lc.settings, function (storage) {
+function initSettings(storage, isChrome) {
+    let browserAPI = isChrome ? chrome : browser;
     lc.settings.keyBindings = storage.keyBindings; // Array
 
     /*  DEFAULT KEYBINDINGS
         Q - Set start time
         E - Set end time
-        R - Toggle loop
+        T - Toggle loop
         H - Hide
     */
 
@@ -833,11 +841,11 @@ chrome.storage.sync.get(lc.settings, function (storage) {
         }); // default: E
         lc.settings.keyBindings.push({
             action: "toggle-loop",
-            key: Number(storage.toggleLoopKeyCode) || 82,
+            key: Number(storage.toggleLoopKeyCode) || 84,
             value: 0,
             force: false,
             predefined: true,
-        }); // default: R
+        }); // default: T
         lc.settings.keyBindings.push({
             action: "toggle-controller", //Show/hide controller
             key: Number(storage.toggleControllerKeycode) || 72,
@@ -846,7 +854,7 @@ chrome.storage.sync.get(lc.settings, function (storage) {
             predefined: true,
         }); // default: H
 
-        chrome.storage.sync.set({
+        browserAPI.storage.sync.set({
             keyBindings: lc.settings.keyBindings,
             //version: lc.settings.version,
             //loopEverything: lc.settings.loopEverything,
@@ -869,4 +877,20 @@ chrome.storage.sync.get(lc.settings, function (storage) {
     //lc.settings.inSeconds = Boolean(storage.inSettings);
 
     initWhenReady(document);
-});
+}
+
+//Chrome uses callbacks while Firefox uses promises.
+if (isChrome) {
+    //Clear storage for testing
+    //chrome.storage.sync.clear();
+
+    chrome.storage.sync.get(lc.settings, function (storage) {
+        initSettings(storage, true);
+    });
+} else {
+    if (!browser) log("Unsupported browser. chrome and browser namespace not found.", 1); //Also doesn't have browser namespace
+
+    browser.storage.sync.get(lc.settings).then((storage) => {
+        initSettings(storage, false);
+    });
+}

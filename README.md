@@ -32,29 +32,37 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. In Firefox, go to `about:debugging`
-4. Click on This Firefox -> Load Temporary Add-on
-5. Select `manifest.json` within the `loopcontrol-main` folder
+3. Add the following to the file `manifest.json` (_id_ value is arbitrary but must be unique):
+
+```JSON
+"browser_specific_settings": {
+    "gecko": {
+      "id": "@aprestoes"
+    }
+  },
+```
+
+4. In Firefox, go to `about:debugging`
+5. Click on This Firefox -> Load Temporary Add-on
+6. Select `manifest.json` within the `loopcontrol-main` folder
 
 ### Chrome Temporary Add-on (For testing purposes)
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. Delete the file `manifest.json`
-4. Rename `manifest-v3-for-chrome.json` to `manifest.json`
-5. In Chrome, go to `chrome://extensions`
-6. Enable Developer Mode in the top-right
-7. Click 'Load unpacked extension...'
-8. Select the `loopcontrol-main` folder
+3. In Chrome, go to `chrome://extensions`
+4. Enable Developer Mode in the top-right
+5. Click 'Load unpacked extension...'
+6. Select the `loopcontrol-main` folder
 
 ## To-do
 
 -   [ ] Remember video loop times
--   [ ] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
+-   [x] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
 
 ## Credit
 
-Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed), the [Firefox fork](https://github.com/codebicycle/videospeed) (seemingly abandoned) and the more updated [gediminasel fork](https://github.com/gediminasel/videospeed-firefox) with a few helpful fixes. It served as the inspiration for this project and its code is the foundation of this extension.
+Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed), the [Firefox fork](https://github.com/codebicycle/videospeed) (seemingly abandoned) and the more updated [gediminasel fork](https://github.com/gediminasel/videospeed-firefox) with a few helpful fixes. The loop UI and settings pages were adapted from these extensions.
 
 <a href="https://www.flaticon.com/free-icons/update" title="update icons">Extension icon created by Pixel perfect - Flaticon</a>
 
