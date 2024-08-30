@@ -1,5 +1,7 @@
 var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;
 var regEndsWithFlags = /\/(?!.*(.).*\1)[gimsuy]*$/;
+const isChrome = window.chrome ? true : false;
+//Chrome uses chrome namespace, Firefox/Edge uses browser.
 
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
@@ -211,13 +213,16 @@ function defineVideoController() {
         var shadow = wrapper.attachShadow({
             mode: "open",
         });
+
+        var shadowURL = isChrome
+            ? chrome.runtime.getURL("shadow.css")
+            : browser.runtime.getURL("shadow.css");
+
         var shadowTemplate = `
         <style>
-            @import "${chrome.runtime.getURL("shadow.css")}";
+            @import "${shadowURL}";
         </style>
-        <div id="controller" style="top:${top}; left:${left}; opacity:${
-            lc.settings.controllerOpacity
-        }">
+        <div id="controller" style="top:${top}; left:${left}; opacity:${lc.settings.controllerOpacity}">
             <span data-action="drag" class="draggable drag-indicator">OFF</span>
             <span id="controls">
                 <button id="start-indicator" class="rw" data-action="set-start">Start</button>
@@ -344,7 +349,10 @@ function initNow(document) {
         defineVideoController();
     } else {
         var link = document.createElement("link");
-        link.href = chrome.runtime.getURL("inject.css");
+        var injectLink = isChrome
+            ? chrome.runtime.getURL("inject.css")
+            : browser.runtime.getURL("inject.css");
+        link.href = injectLink;
         link.type = "text/css";
         link.rel = "stylesheet";
         document.head.appendChild(link);
@@ -362,7 +370,7 @@ function initNow(document) {
         doc.addEventListener(
             "keydown",
             function (event) {
-                var keyCode = event.keyCode;
+                var keyCode = event.key;
                 log("Processing keydown event: " + keyCode, 4);
 
                 // Ignore if following modifier is active.
@@ -627,14 +635,14 @@ function toggleLoop(video) {
         video.vsl.dragIndicator.textContent = "ON";
         video.addEventListener("timeupdate", (lc.handleLoop = checkTime.bind(video)));
 
-        video.vsl.loopFlagObserver.disconnect(); //Disconnect observer before toggling flag so it doesn't fire twice
+        //video.vsl.loopFlagObserver.disconnect(); //Disconnect observer before toggling flag so it doesn't fire twice
         //Use loop tag instead of load() and play()
-        video.loop = true;
+        //video.loop = true;
 
         //Checks if user manually toggles loop flag with right-click->loop then toggles LoopControl
-        video.vsl.loopFlagObserver.observe(video, {
+        /*video.vsl.loopFlagObserver.observe(video, {
             attributeFilter: ["loop"],
-        });
+        });*/
     }
 }
 
@@ -644,15 +652,17 @@ function checkTime() {
     if (!lc.loopsEnabled[video.currentSrc]) {
         video.vsl.loopFlagObserver.disconnect();
         video.removeEventListener("timeupdate", lc.handleLoop);
-        video.loop = false;
-        video.vsl.loopFlagObserver.observe(video, {
+        //video.loop = false;
+        /*video.vsl.loopFlagObserver.observe(video, {
             attributeFilter: ["loop"],
-        });
+        });*/
     } else if (
         video.currentTime >= lc.endTimes[video.currentSrc] ||
         video.currentTime < lc.startTimes[video.currentSrc]
     ) {
         video.currentTime = lc.startTimes[video.currentSrc];
+        //video.load();
+        video.play();
     }
     //Loop back to beginning if the video is before the loop beginning or after the end
 }
@@ -804,14 +814,14 @@ function tempShowController(controller) {
     }, 500);
 }
 
-//Actually start now
-chrome.storage.sync.get(lc.settings, function (storage) {
+function initSettings(storage, isChrome) {
+    let browserAPI = isChrome ? chrome : browser;
     lc.settings.keyBindings = storage.keyBindings; // Array
 
     /*  DEFAULT KEYBINDINGS
         Q - Set start time
         E - Set end time
-        R - Toggle loop
+        T - Toggle loop
         H - Hide
     */
 
@@ -819,34 +829,34 @@ chrome.storage.sync.get(lc.settings, function (storage) {
         log("Keybindings not set, setting to defaults.", 3);
         lc.settings.keyBindings.push({
             action: "set-start",
-            key: Number(storage.setStartKeyCode) || 81,
+            key: storage.setStartKeyCode || "q",
             value: 0,
             force: false,
             predefined: true,
         }); // default: Q
         lc.settings.keyBindings.push({
             action: "set-end",
-            key: Number(storage.setEndKeyCode) || 69,
+            key: storage.setEndKeyCode || "e",
             value: 0,
             force: false,
             predefined: true,
         }); // default: E
         lc.settings.keyBindings.push({
             action: "toggle-loop",
-            key: Number(storage.toggleLoopKeyCode) || 82,
+            key: storage.toggleLoopKeyCode || "t",
             value: 0,
             force: false,
             predefined: true,
-        }); // default: R
+        }); // default: T
         lc.settings.keyBindings.push({
             action: "toggle-controller", //Show/hide controller
-            key: Number(storage.toggleControllerKeycode) || 72,
+            key: storage.toggleControllerKeycode || "h",
             value: 0,
             force: false,
             predefined: true,
         }); // default: H
 
-        chrome.storage.sync.set({
+        browserAPI.storage.sync.set({
             keyBindings: lc.settings.keyBindings,
             //version: lc.settings.version,
             //loopEverything: lc.settings.loopEverything,
@@ -869,4 +879,20 @@ chrome.storage.sync.get(lc.settings, function (storage) {
     //lc.settings.inSeconds = Boolean(storage.inSettings);
 
     initWhenReady(document);
-});
+}
+
+//Chrome uses callbacks while Firefox uses promises.
+if (isChrome) {
+    //Clear storage for testing
+    //chrome.storage.sync.clear();
+
+    chrome.storage.sync.get(lc.settings, function (storage) {
+        initSettings(storage, true);
+    });
+} else {
+    if (!browser) log("Unsupported browser. chrome and browser namespace not found.", 1); //Also doesn't have browser namespace
+
+    browser.storage.sync.get(lc.settings).then((storage) => {
+        initSettings(storage, false);
+    });
+}

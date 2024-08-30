@@ -1,6 +1,6 @@
 {
 
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "LoopControl",
   "version": "0.1.0",
   "description": "Loop specific sections of videos.",
@@ -8,6 +8,12 @@
   "homepage_url": "https://github.com/aprestoes/loopcontrol",
 
   "permissions": ["storage"],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@aprestoes"
+    }
+  },  
 
   "icons": {
     "32": "icons/icon-32.png"
@@ -34,19 +40,19 @@
     }
   ],
 
-  "browser_action": {
+  "action": {
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     },
     "default_popup": "popup.html"
   },
+  
 
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "@aprestoes"
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.css", "shadow.css"],
+      "matches": ["<all_urls>"]
     }
-  },
-
-  "web_accessible_resources": ["inject.css", "shadow.css"]
+  ]
 }
