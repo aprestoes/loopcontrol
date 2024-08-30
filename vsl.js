@@ -370,7 +370,7 @@ function initNow(document) {
         doc.addEventListener(
             "keydown",
             function (event) {
-                var keyCode = event.keyCode;
+                var keyCode = event.key;
                 log("Processing keydown event: " + keyCode, 4);
 
                 // Ignore if following modifier is active.
@@ -635,14 +635,14 @@ function toggleLoop(video) {
         video.vsl.dragIndicator.textContent = "ON";
         video.addEventListener("timeupdate", (lc.handleLoop = checkTime.bind(video)));
 
-        video.vsl.loopFlagObserver.disconnect(); //Disconnect observer before toggling flag so it doesn't fire twice
+        //video.vsl.loopFlagObserver.disconnect(); //Disconnect observer before toggling flag so it doesn't fire twice
         //Use loop tag instead of load() and play()
-        video.loop = true;
+        //video.loop = true;
 
         //Checks if user manually toggles loop flag with right-click->loop then toggles LoopControl
-        video.vsl.loopFlagObserver.observe(video, {
+        /*video.vsl.loopFlagObserver.observe(video, {
             attributeFilter: ["loop"],
-        });
+        });*/
     }
 }
 
@@ -652,15 +652,17 @@ function checkTime() {
     if (!lc.loopsEnabled[video.currentSrc]) {
         video.vsl.loopFlagObserver.disconnect();
         video.removeEventListener("timeupdate", lc.handleLoop);
-        video.loop = false;
-        video.vsl.loopFlagObserver.observe(video, {
+        //video.loop = false;
+        /*video.vsl.loopFlagObserver.observe(video, {
             attributeFilter: ["loop"],
-        });
+        });*/
     } else if (
         video.currentTime >= lc.endTimes[video.currentSrc] ||
         video.currentTime < lc.startTimes[video.currentSrc]
     ) {
         video.currentTime = lc.startTimes[video.currentSrc];
+        //video.load();
+        video.play();
     }
     //Loop back to beginning if the video is before the loop beginning or after the end
 }
@@ -827,28 +829,28 @@ function initSettings(storage, isChrome) {
         log("Keybindings not set, setting to defaults.", 3);
         lc.settings.keyBindings.push({
             action: "set-start",
-            key: Number(storage.setStartKeyCode) || 81,
+            key: storage.setStartKeyCode || "q",
             value: 0,
             force: false,
             predefined: true,
         }); // default: Q
         lc.settings.keyBindings.push({
             action: "set-end",
-            key: Number(storage.setEndKeyCode) || 69,
+            key: storage.setEndKeyCode || "e",
             value: 0,
             force: false,
             predefined: true,
         }); // default: E
         lc.settings.keyBindings.push({
             action: "toggle-loop",
-            key: Number(storage.toggleLoopKeyCode) || 84,
+            key: storage.toggleLoopKeyCode || "t",
             value: 0,
             force: false,
             predefined: true,
         }); // default: T
         lc.settings.keyBindings.push({
             action: "toggle-controller", //Show/hide controller
-            key: Number(storage.toggleControllerKeycode) || 72,
+            key: storage.toggleControllerKeycode || "h",
             value: 0,
             force: false,
             predefined: true,

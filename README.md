@@ -22,6 +22,8 @@ E - Set loop end
 R - Toggle loop
 H - Hide controller
 
+**Development is focused primarily on Firefox. The upgrade to Manifest v3 has introduced some issues in Google Chrome but not Firefox.**
+
 ## Installation
 
 ### Install from Addons.Mozilla.Org (AMO)

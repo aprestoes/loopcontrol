@@ -9,6 +9,12 @@
 
   "permissions": ["storage"],
 
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@aprestoes"
+    }
+  },  
+
   "icons": {
     "32": "icons/icon-32.png"
   },

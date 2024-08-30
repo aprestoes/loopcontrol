@@ -1,4 +1,5 @@
 var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;
+const isChrome = window.chrome ? true : false;
 
 var lcDefaults = {
     audioEnabled: false, // default: false
@@ -7,12 +8,12 @@ var lcDefaults = {
     enabled: true, // default enabled
     controllerOpacity: 0.7, // default: 0.3
     keyBindings: [
-        { action: "set-start", key: 81, value: 0, force: false, predefined: true }, // Q
-        { action: "set-end", key: 69, value: 0, force: false, predefined: true }, //E
-        { action: "toggle-loop", key: 82, value: 0, force: false, predefined: true }, //R
+        { action: "set-start", key: "q", value: 0, force: false, predefined: true }, // Q
+        { action: "set-end", key: "e", value: 0, force: false, predefined: true }, //E
+        { action: "toggle-loop", key: "t", value: 0, force: false, predefined: true }, //T
         {
             action: "toggle-controller",
-            key: 72,
+            key: "h",
             value: 0,
             force: false,
             predefined: true,
@@ -28,78 +29,28 @@ var lcDefaults = {
 
 var keyBindings = [];
 
-var keyCodeAliases = {
-    0: "null",
-    null: "null",
-    undefined: "null",
-    32: "Space",
-    37: "Left",
-    38: "Up",
-    39: "Right",
-    40: "Down",
-    96: "Num 0",
-    97: "Num 1",
-    98: "Num 2",
-    99: "Num 3",
-    100: "Num 4",
-    101: "Num 5",
-    102: "Num 6",
-    103: "Num 7",
-    104: "Num 8",
-    105: "Num 9",
-    106: "Num *",
-    107: "Num +",
-    109: "Num -",
-    110: "Num .",
-    111: "Num /",
-    112: "F1",
-    113: "F2",
-    114: "F3",
-    115: "F4",
-    116: "F5",
-    117: "F6",
-    118: "F7",
-    119: "F8",
-    120: "F9",
-    121: "F10",
-    122: "F11",
-    123: "F12",
-    186: ";",
-    188: "<",
-    189: "-",
-    187: "+",
-    190: ">",
-    191: "/",
-    192: "~",
-    219: "[",
-    220: "\\",
-    221: "]",
-    222: "'",
-};
-
 function recordKeyPress(e) {
     if (
-        (e.keyCode >= 48 && e.keyCode <= 57) || // Numbers 0-9
-        (e.keyCode >= 65 && e.keyCode <= 90) || // Letters A-Z
-        keyCodeAliases[e.keyCode] // Other character keys
+        (e.key >= "0" && e.key <= "9") || // Numbers 0-9
+        (e.key >= "a" && e.key <= "z") // Letters A-Z
     ) {
-        e.target.value = keyCodeAliases[e.keyCode] || String.fromCharCode(e.keyCode);
-        e.target.keyCode = e.keyCode;
+        e.target.value = e.key;
+        e.target.key = e.key;
 
         e.preventDefault();
         e.stopPropagation();
-    } else if (e.keyCode === 8) {
+    } else if (e.key === "Backspace") {
         // Clear input when backspace pressed
         e.target.value = "";
-    } else if (e.keyCode === 27) {
+    } else if (e.key === "Escape") {
         // When esc clicked, clear input
         e.target.value = "null";
-        e.target.keyCode = null;
+        e.target.key = null;
     }
 }
 
 function inputFilterNumbersOnly(e) {
-    var char = String.fromCharCode(e.keyCode);
+    var char = e.key;
     if (!/[\d\.]$/.test(char) || !/^\d+(\.\d*)?$/.test(e.target.value + char)) {
         e.preventDefault();
         e.stopPropagation();
@@ -111,58 +62,25 @@ function inputFocus(e) {
 }
 
 function inputBlur(e) {
-    e.target.value =
-        keyCodeAliases[e.target.keyCode] || String.fromCharCode(e.target.keyCode);
+    e.target.value = e.target.key;
 }
 
-function updateShortcutInputText(inputId, keyCode) {
-    document.getElementById(inputId).value =
-        keyCodeAliases[keyCode] || String.fromCharCode(keyCode);
-    document.getElementById(inputId).keyCode = keyCode;
+function updateShortcutInputText(inputId, key) {
+    document.getElementById(inputId).value = key;
+    document.getElementById(inputId).key = key;
 }
 
-function updateCustomShortcutInputText(inputItem, keyCode) {
-    inputItem.value = keyCodeAliases[keyCode] || String.fromCharCode(keyCode);
-    inputItem.keyCode = keyCode;
+function updateCustomShortcutInputText(inputItem, key) {
+    inputItem.value = key;
+    inputItem.key = key;
 }
 
 // List of custom actions for which customValue should be disabled
 var customActionsNoValues = ["toggle-controller", "set-start", "set-end", "toggle-loop"];
 
-/*function add_shortcut() {
-    var html = `<select class="customDo">
-    <option value="slower">Decrease speed</option>
-    <option value="faster">Increase speed</option>
-    <option value="rewind">Rewind</option>
-    <option value="advance">Advance</option>
-    <option value="reset">Reset speed</option>
-    <option value="fast">Preferred speed</option>
-    <option value="muted">Mute</option>
-    <option value="pause">Pause</option>
-    <option value="mark">Set marker</option>
-    <option value="jump">Jump to marker</option>
-    <option value="display">Show/hide controller</option>
-    </select>
-    <input class="customKey" type="text" placeholder="press a key"/>
-    <input class="customValue" type="text" placeholder="value (0.10)"/>
-    <select class="customForce">
-    <option value="false">Do not disable website key bindings</option>
-    <option value="true">Disable website key bindings</option>
-    </select>
-    <button class="removeParent">X</button>`;
-    var div = document.createElement("div");
-    div.setAttribute("class", "row customs");
-    div.innerHTML = html;
-    var customs_element = document.getElementById("customs");
-    customs_element.insertBefore(
-        div,
-        customs_element.children[customs_element.childElementCount - 1]
-    );
-}*/
-
 function createKeyBindings(item) {
     const action = item.querySelector(".customDo").value;
-    const key = item.querySelector(".customKey").keyCode;
+    const key = item.querySelector(".customKey").key;
     //const value = Number(item.querySelector(".customValue").value);
     const force = item.querySelector(".customForce").value;
     const predefined = !!item.id; //item.id ? true : false;
@@ -228,31 +146,50 @@ function save_options() {
     var blacklist = document.getElementById("blacklist").value;
 
     //Reset keycodes
-    chrome.storage.sync.remove([
+    let keySettings = [
         "setStartKeyCode",
         "setEndKeyCode",
         "toggleLoopKeyCode",
         "toggleControllerKeyCode",
-    ]);
-    chrome.storage.sync.set(
-        {
-            eudioEnabled: audioEnabled,
-            enabled: enabled,
-            inSeconds: inSeconds,
-            startHidden: startHidden,
-            controllerOpacity: controllerOpacity,
-            keyBindings: keyBindings,
-            blacklist: blacklist.replace(regStrip, ""),
-        },
-        function () {
-            // Update status to let user know options were saved.
-            var status = document.getElementById("status");
-            status.textContent = "Options saved. Reload pages.";
-            setTimeout(function () {
-                status.textContent = "";
-            }, 1000);
-        }
-    );
+    ];
+
+    let currentSettings = {
+        eudioEnabled: audioEnabled,
+        enabled: enabled,
+        inSeconds: inSeconds,
+        startHidden: startHidden,
+        controllerOpacity: controllerOpacity,
+        keyBindings: keyBindings,
+        blacklist: blacklist.replace(regStrip, ""),
+    };
+
+    let showStatus = function () {
+        // Update status to let user know options were saved.
+        var status = document.getElementById("status");
+        status.textContent = "Options saved. Reload pages.";
+        setTimeout(function () {
+            status.textContent = "";
+        }, 1000);
+    };
+
+    if (isChrome) {
+        chrome.storage.sync.remove(keySettings);
+        chrome.storage.sync.set(currentSettings, function () {
+            showStatus;
+        });
+    } else {
+        browser.storage.sync
+            .remove(keySettings)
+            .then(function () {
+                return browser.storage.sync.set(currentSettings);
+            })
+            .then(function () {
+                showStatus();
+            })
+            .catch(function (error) {
+                console.error("Could not save settings: ", error);
+            });
+    }
 }
 
 // Restores options from chrome.storage
@@ -332,7 +269,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("experimental").addEventListener("click", show_experimental);
 
     function eventCaller(event, className, funcName) {
-        if (!event.target.classList.contains(className)) {
+        console.log(event);
+        if (event.target.classList && !event.target.classList.contains(className)) {
             return;
         }
         funcName(event);
