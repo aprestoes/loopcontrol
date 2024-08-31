@@ -6,7 +6,7 @@ const isChrome = window.chrome ? true : false;
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
     settings: {
-        logLevel: 2, //See log function below. Default: 2
+        logLevel: 4, //See log function below. Default: 2
         audioEnabled: false, //Enable for audio as well as video. Default: true
         //loopEverything: false, //FIXME: Automatically loop all videos. Default: false
         startHidden: false,
@@ -101,7 +101,7 @@ function runAction(action, value, e) {
 
             if (action !== "blink") {
                 //So it doesn't blink twice
-                if (action !== "toggle-controller" && e.type === "keydown")
+                if (action !== "toggle-controller" && e.type === "keyup")
                     tempShowController(controller);
 
                 lc.lastInteracted = v.vsl;
@@ -312,6 +312,14 @@ function defineVideoController() {
 function initNow(document) {
     log("initNow started", 4);
 
+    if (
+        !lc.settings.enabled ||
+        !document.body ||
+        document.body.classList.contains("vsl-initialized")
+    ) {
+        return;
+    }
+
     function checkForVideo(node, parent, added) {
         // Only proceed with supposed removal if node is missing from DOM
         if (!added && document.body.contains(node)) {
@@ -334,12 +342,6 @@ function initNow(document) {
                 checkForVideo(child, child.parentNode || parent, added);
             }
         }
-    }
-
-    if (!lc.settings.enabled) return;
-
-    if (!document.body || document.body.classList.contains("vsl-initialized")) {
-        return;
     }
 
     document.body.classList.add("vsl-initialized");
@@ -368,10 +370,9 @@ function initNow(document) {
     docs.forEach(function (doc) {
         //doc.querySelector("#vsl-controller").forEach(());
         doc.addEventListener(
-            "keydown",
+            "keyup",
             function (event) {
                 var keyCode = event.key;
-                log("Processing keydown event: " + keyCode, 4);
 
                 // Ignore if following modifier is active.
                 if (
@@ -400,6 +401,8 @@ function initNow(document) {
                 if (!lc.mediaElements.length) {
                     return false;
                 }
+
+                log("Processing key event: " + keyCode, 4);
 
                 var item = lc.settings.keyBindings.find((item) => item.key === keyCode);
                 if (item) {
@@ -522,7 +525,7 @@ function initWhenReady(document) {
         initNow(window.document);
     });
 
-    if (document) {
+    if (document && document.readyState === "complete") {
         if (document.readyState === "complete") {
             initNow(document);
         } else {
