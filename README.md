@@ -72,6 +72,8 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 Huge thanks to [Video Speed Controller](https://github.com/igrigorik/videospeed), the [Firefox fork](https://github.com/codebicycle/videospeed) (seemingly abandoned) and the more updated [gediminasel fork](https://github.com/gediminasel/videospeed-firefox) with a few helpful fixes. The loop UI and settings pages were adapted from these extensions.
 
+Credit to Samplelib's [videos](https://samplelib.com/sample-mp4.html) for the test .mp4.
+
 <a href="https://www.flaticon.com/free-icons/update" title="update icons">Extension icon created by Pixel perfect - Flaticon</a>
 
 Mockup assets used in extension listings from [MockupDen](https://mockupden.com) and [Shaping Rain](https://shapingrain.com)
