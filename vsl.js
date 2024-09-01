@@ -1,7 +1,6 @@
-var regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;
-var regEndsWithFlags = /\/(?!.*(.).*\1)[gimsuy]*$/;
+const regStrip = /^[\r\t\f\v ]+|[\r\t\f\v ]+$/gm;
+const regEndsWithFlags = /\/(?!.*(.).*\1)[gimsuy]*$/;
 const isChrome = window.chrome ? true : false;
-//Chrome uses chrome namespace, Firefox/Edge uses browser.
 
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
@@ -231,7 +230,7 @@ function defineVideoController() {
                 <button id="toggle-indicator" class="hide-button" data-action="toggle-loop">
                   OFF
                 </button>
-                <button data-action="toggle-controller" class="hide-button">&times;</button>
+                <button id="hide-indicator" data-action="toggle-controller" class="hide-button">&times;</button>
             </span>
         </div>
         `;
@@ -716,11 +715,6 @@ function handleDrag(video, e) {
     parentElement.addEventListener("mousemove", startDragging);
 }
 
-function escapeStringRegExp(str) {
-    matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
-    return str.replace(matchOperatorsRe, "\\$&");
-}
-
 function isBlacklisted() {
     let blacklisted = false;
     lc.settings.blacklist.split("\n").forEach((match) => {
@@ -787,15 +781,6 @@ function getShadow(parent) {
     return result.flat(Infinity);
 }
 
-function convertSecToMin(timeInSecs) {
-    let tempDate = new Date(null);
-    tempDate.setSeconds(Math.round(timeInSecs));
-
-    return timeInSecs >= 3600
-        ? tempDate.toISOString().substring(11, 19) //If over 1 hour, display hours in string
-        : tempDate.toISOString().substring(14, 19);
-}
-
 function tempShowController(controller) {
     clearTimeout(controller.blinkTimeOut);
 
@@ -815,6 +800,20 @@ function tempShowController(controller) {
             .querySelector("#controller #controls")
             .classList.toggle("blinked-controls");
     }, 500);
+}
+
+function convertSecToMin(timeInSecs) {
+    let tempDate = new Date(null);
+    tempDate.setSeconds(Math.round(timeInSecs));
+
+    return timeInSecs >= 3600
+        ? tempDate.toISOString().substring(11, 19) //If over 1 hour, display hours in string
+        : tempDate.toISOString().substring(14, 19);
+}
+
+function escapeStringRegExp(str) {
+    let matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+    return str.replace(matchOperatorsRe, "\\$&");
 }
 
 function initSettings(storage, isChrome) {
