@@ -57,6 +57,12 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 5. Click 'Load unpacked extension...'
 6. Select the `loopcontrol-main` folder
 
+## Testing
+
+1. Change into the project directory with `cd loopcontrol`
+2. Install test dependencies with `npm install`
+3. Run the automated Jest tests with `npm test`
+
 ## To-do
 
 -   [ ] Remember video loop times
