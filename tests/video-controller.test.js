@@ -20,7 +20,7 @@ let browser;
 
 beforeAll(async () => {
     browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         args: [
             `--disable-extensions-except=${EXTENSION_PATH}`,
             `--load-extension=${EXTENSION_PATH}`,
@@ -295,7 +295,6 @@ describe("Testing keyboard shortcuts", () => {
                 .querySelector("#toggle-indicator")
                 .textContent.trim();
         });
-        console.log("Original: ", originalState);
 
         //Trigger keyup
         await page.evaluate(() => {
@@ -315,7 +314,6 @@ describe("Testing keyboard shortcuts", () => {
         });
 
         let expectedState = originalState === "OFF" ? "ON" : "OFF";
-        console.log("Expected: ", expectedState);
         expect(newState).toBe(expectedState);
     });
 });
