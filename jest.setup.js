@@ -1,1 +1,0 @@
-Object.assign(global, require('@mobile-next/jest-chrome'));
