@@ -1,4 +1,4 @@
-name: Test Pull Requests
+name: Chrome Test
 
 on:
     push:

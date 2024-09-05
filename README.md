@@ -1,5 +1,7 @@
 # Loop Control (Video Section Loop)
 
+![Chrome Test](https://github.com/aprestoes/loopcontrol/actions/workflows/main.yml/badge.svg)
+
 ## What does it do?
 
 This extension loops user-specified sections of videos AND audio (enabled in settings). Instead of looping just from the end back to the beginning of the video, you can loop between any two points. Create a gif-like effect just within your browser!
@@ -34,19 +36,8 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. Add the following to the file `manifest.json` (_id_ value is arbitrary but must be unique):
-
-```JSON
-"browser_specific_settings": {
-    "gecko": {
-      "id": "@aprestoes"
-    }
-  },
-```
-
-4. In Firefox, go to `about:debugging`
-5. Click on This Firefox -> Load Temporary Add-on
-6. Select `manifest.json` within the `loopcontrol-main` folder
+3. Click on This Firefox -> Load Temporary Add-on
+4. Select `manifest.json` within the `loopcontrol-main` folder
 
 ### Chrome Temporary Add-on (For testing purposes)
 
