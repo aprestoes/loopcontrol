@@ -5,7 +5,7 @@ const isChrome = window.chrome ? true : false;
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
     settings: {
-        logLevel: 4, //See log function below. Default: 2
+        logLevel: 2, //See log function below. Default: 2
         audioEnabled: false, //Enable for audio as well as video. Default: true
         //loopEverything: false, //FIXME: Automatically loop all videos. Default: false
         startHidden: false,
@@ -578,7 +578,7 @@ function setEnd(video, loopEnd) {
         return;
     } else {
         loopEnd = Number(loopEnd);
-        lc.endTimes[src] = loopEnd;
+        lc.endTimes[src] = loopEnd >= video.duration ? video.duration - 0.05 : loopEnd;
         video.vsl.endIndicator.textContent = lc.settings.inSeconds
             ? Math.round(loopEnd)
             : convertSecToMin(loopEnd);
@@ -664,7 +664,8 @@ function checkTime() {
     ) {
         video.currentTime = lc.startTimes[video.currentSrc];
         //video.load();
-        video.play();
+        //video.play();
+        setTimeout(() => video.play(), 10); //Introduce an imperceptible delay so Chrome doesn't block it
     }
     //Loop back to beginning if the video is before the loop beginning or after the end
 }
