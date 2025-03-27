@@ -4,9 +4,6 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
-//import { chrome } from 'jest-chrome';
-//const chrome = require('sinon-chrome/extensions');
-
 //Global constants
 //const TEST_VIDEO_URL = "https://samplelib.com/lib/preview/mp4/sample-5s.mp4"; //Provide the direct link to a test .mp4 video file //TODO: Upload the sample .mp4 to GitHub to alleviate stress for the video host
 const TEST_VIDEO_URL = `file:${path.join(__dirname, "sample.mp4")}`; //Default to tests/sample.mp4. Can also use a full URL
