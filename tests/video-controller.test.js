@@ -21,6 +21,7 @@ beforeAll(async () => {
         args: [
             `--disable-extensions-except=${EXTENSION_PATH}`,
             `--load-extension=${EXTENSION_PATH}`,
+            `--no-sandbox` //If running locally, remove this flag. Puppeteer reuires this for GitHub Actions
         ],
     });
 });
