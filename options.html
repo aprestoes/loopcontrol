@@ -22,9 +22,9 @@
           value=""
           placeholder="press a key"
         />
-        <select class="customForce">
+        <select class="customForce experimental">
           <option value="false">Do not override website key bindings</option>
-          <option value="true">override website key bindings</option>
+          <option value="true">Override website key bindings</option>
         </select>
       </div>
       <div class="row customs" id="set-start">
@@ -37,9 +37,9 @@
           value=""
           placeholder="press a key"
         />
-        <select class="customForce">
+        <select class="customForce experimental">
           <option value="false">Do not override website key bindings</option>
-          <option value="true">override website key bindings</option>
+          <option value="true">Override website key bindings</option>
         </select>
       </div>
       <div class="row customs" id="set-end">
@@ -52,9 +52,9 @@
           value=""
           placeholder="press a key"
         />
-        <select class="customForce">
+        <select class="customForce experimental">
           <option value="false">Do not override website key bindings</option>
-          <option value="true">override website key bindings</option>
+          <option value="true">Override website key bindings</option>
         </select>
       </div>
       <div class="row customs" id="toggle-loop">
@@ -67,9 +67,9 @@
           value=""
           placeholder="press a key"
         />
-        <select class="customForce">
+        <select class="customForce experimental">
           <option value="false">Do not override website key bindings</option>
-          <option value="true">override website key bindings</option>
+          <option value="true">Override website key bindings</option>
         </select>
       </div>
 
@@ -115,6 +115,17 @@
           </em>
         </label>
         <textarea id="blacklist" rows="10" cols="50"></textarea>
+      </div>
+
+      <div class="row experimental">
+        <label for="loggingLevel">Logging Level</label>
+        <select id="loggingLevel" class="">
+          <option value="0">0 - None</option>
+          <option value="1">1 - Errors</option>
+          <option value="2" selected>2 - Warnings</option>
+          <option value="3">3 - Info</option>
+          <option value="4">4 - Full Debugging Messages</option>
+        </select>
       </div>
     </section>
 

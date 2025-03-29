@@ -5,9 +5,9 @@ const isChrome = window.chrome ? true : false;
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
     settings: {
-        logLevel: 2, //See log function below. Default: 2
+        logLevel: 4, //See log function below. Default: 2
         audioEnabled: false, //Enable for audio as well as video. Default: true
-        //loopEverything: false, //FIXME: Automatically loop all videos. Default: false
+        //loopEverything: false
         startHidden: false,
         inSeconds: false, //Display labels in seconds or in MM:SS format
         enabled: true,
@@ -149,6 +149,8 @@ function defineVideoController() {
                     } else {
                         controller.classList.remove("vsl-nosource");
                     }
+
+                    //TODO: If source changed/no eventListener, then reset controller.
                 }
             });
         });
@@ -663,8 +665,6 @@ function checkTime() {
         video.currentTime < lc.startTimes[video.currentSrc]
     ) {
         video.currentTime = lc.startTimes[video.currentSrc];
-        //video.load();
-        //video.play();
         setTimeout(() => video.play(), 10); //Introduce an imperceptible delay so Chrome doesn't block it
     }
     //Loop back to beginning if the video is before the loop beginning or after the end
@@ -821,6 +821,8 @@ function initSettings(storage, isChrome) {
     let browserAPI = isChrome ? chrome : browser;
     lc.settings.keyBindings = storage.keyBindings; // Array
 
+    log("Loaded settings: " + JSON.stringify(storage), 4);
+
     /*  DEFAULT KEYBINDINGS
         Q - Set start time
         E - Set end time
@@ -878,8 +880,7 @@ function initSettings(storage, isChrome) {
     lc.settings.startHidden = Boolean(storage.startHidden);
     lc.settings.controllerOpacity = Number(storage.controllerOpacity);
     lc.settings.blacklist = String(storage.blacklist);
-    //lc.settings.loopEverything = Boolean(storage.loopEverything);
-    //lc.settings.inSeconds = Boolean(storage.inSettings);
+    lc.settings.logLevel = Number(storage.logLevel);
 
     initWhenReady(document);
 }

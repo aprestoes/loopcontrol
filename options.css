@@ -102,8 +102,11 @@ select {
 }
 
 .customForce {
-  display: none;
   width: 250px;
+}
+
+.experimental {
+  display: none;
 }
 
 .customKey {

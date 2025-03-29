@@ -7,6 +7,7 @@ var lcDefaults = {
     inSeconds: false,
     enabled: true, // default enabled
     controllerOpacity: 0.7, // default: 0.3
+    logLevel: 2,
     keyBindings: [
         { action: "set-start", key: "q", value: 0, force: false, predefined: true }, // Q
         { action: "set-end", key: "e", value: 0, force: false, predefined: true }, //E
@@ -28,6 +29,32 @@ var lcDefaults = {
 };
 
 var keyBindings = [];
+var currentLogLevel;
+
+/* Log Levels:
+  0. None
+  1. Errors
+  2. Warnings
+  3. Info
+  4. Debug
+*/
+function log(message, logLevel = 5) {
+    let currentLevel = logLevel;
+
+    if (currentLevel >= logLevel) {
+        if (logLevel == 1) {
+            console.log("ERROR: " + message);
+        } else if (logLevel == 2) {
+            console.log("WARNING: " + message);
+        } else if (logLevel == 3) {
+            console.log("INFO: " + message);
+        } else if (logLevel == 4) {
+            console.log("DEBUG: " + message);
+        } else {
+            console.log("UNDEFINED: " + message);
+        }
+    }
+}
 
 function recordKeyPress(e) {
     if (
@@ -137,6 +164,8 @@ function save_options() {
         createKeyBindings(item)
     ); // Remove added shortcuts
 
+    log("Saving options", 3);
+
     //var loopEverything = document.getElementById("loopEverything").checked;
     var inSeconds = document.getElementById("inSeconds").checked;
     var audioEnabled = document.getElementById("audioEnabled").checked;
@@ -144,6 +173,7 @@ function save_options() {
     var startHidden = document.getElementById("startHidden").checked;
     var controllerOpacity = document.getElementById("controllerOpacity").value;
     var blacklist = document.getElementById("blacklist").value;
+    var logLevel = document.getElementById("loggingLevel").value;
 
     //Reset keycodes
     let keySettings = [
@@ -154,14 +184,17 @@ function save_options() {
     ];
 
     let currentSettings = {
-        eudioEnabled: audioEnabled,
+        audioEnabled: audioEnabled,
         enabled: enabled,
         inSeconds: inSeconds,
         startHidden: startHidden,
         controllerOpacity: controllerOpacity,
         keyBindings: keyBindings,
         blacklist: blacklist.replace(regStrip, ""),
+        logLevel: logLevel
     };
+
+    log("Saving the following settings: " + JSON.stringify(currentSettings), 3);
 
     let showStatus = function () {
         // Update status to let user know options were saved.
@@ -173,11 +206,13 @@ function save_options() {
     };
 
     if (isChrome) {
+        log("Is a Chrome browser", 3);
         chrome.storage.sync.remove(keySettings);
         chrome.storage.sync.set(currentSettings, function () {
-            showStatus;
+            showStatus();
         });
     } else {
+        log("Is a Firefox browser", 3);
         browser.storage.sync
             .remove(keySettings)
             .then(function () {
@@ -197,11 +232,13 @@ function restore_options() {
     chrome.storage.sync.get(lcDefaults, function (storage) {
         document.getElementById("inSeconds").checked = storage.inSeconds;
         //document.getElementById("loopEverything").checked = storage.loopEverything;
-        document.getElementById("audioEnabled").checked = audioEnabled.audioBoolean;
+        document.getElementById("audioEnabled").checked = storage.audioEnabled;
         document.getElementById("enabled").checked = storage.enabled;
         document.getElementById("startHidden").checked = storage.startHidden;
         document.getElementById("controllerOpacity").value = storage.controllerOpacity;
         document.getElementById("blacklist").value = storage.blacklist;
+        document.querySelector("#loggingLevel").value = storage.logLevel;
+        currentLogLevel = storage.logLevel;
 
         for (let i in storage.keyBindings) {
             var item = storage.keyBindings[i];
@@ -256,7 +293,7 @@ function restore_defaults() {
 
 function show_experimental() {
     document
-        .querySelectorAll(".customForce")
+        .querySelectorAll(".experimental")
         .forEach((item) => (item.style.display = "inline-block"));
 }
 
@@ -269,7 +306,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("experimental").addEventListener("click", show_experimental);
 
     function eventCaller(event, className, funcName) {
-        console.log(event);
         if (event.target.classList && !event.target.classList.contains(className)) {
             return;
         }
