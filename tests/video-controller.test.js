@@ -5,6 +5,7 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 
 //Global constants
+//const TEST_VIDEO_URL = "https://samplelib.com/lib/preview/mp4/sample-5s.mp4"; //Provide the direct link to a test .mp4 video file //TODO: Upload the sample .mp4 to GitHub to alleviate stress for the video host
 const TEST_VIDEO_URL = `file:${path.join(__dirname, "sample.mp4")}`; //Default to tests/sample.mp4. Can also use a full URL
 //If using URL, server must return Accept-Ranges. Otherwise Chrome breaks seeking and currentTime may fail
 const EXTENSION_PATH = "./";
@@ -20,7 +21,7 @@ beforeAll(async () => {
         args: [
             `--disable-extensions-except=${EXTENSION_PATH}`,
             `--load-extension=${EXTENSION_PATH}`,
-            //`--no-sandbox` //If running locally, remove this flag. Puppeteer reuires this for GitHub Actions
+            `--no-sandbox` //If running locally, remove this flag. Puppeteer reuires this for GitHub Actions
         ],
     });
 });
