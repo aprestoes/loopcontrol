@@ -8,6 +8,8 @@ var lcDefaults = {
     enabled: true, // default enabled
     controllerOpacity: 0.7, // default: 0.3
     logLevel: 2,
+    offsetX: 0,
+    offsetY: 0,
     keyBindings: [
         { action: "set-start", key: "q", value: 0, force: false, predefined: true }, // Q
         { action: "set-end", key: "e", value: 0, force: false, predefined: true }, //E
@@ -171,9 +173,11 @@ function save_options() {
     var audioEnabled = document.getElementById("audioEnabled").checked;
     var enabled = document.getElementById("enabled").checked;
     var startHidden = document.getElementById("startHidden").checked;
-    var controllerOpacity = document.getElementById("controllerOpacity").value;
+    var controllerOpacity = Number(document.getElementById("controllerOpacity").value);
     var blacklist = document.getElementById("blacklist").value;
-    var logLevel = document.getElementById("loggingLevel").value;
+    var logLevel = Number(document.getElementById("loggingLevel").value);
+    var offsetX = Number(document.getElementById("offset-x").value);
+    var offsetY = Number(document.getElementById("offset-y").value);
 
     //Reset keycodes
     let keySettings = [
@@ -191,7 +195,9 @@ function save_options() {
         controllerOpacity: controllerOpacity,
         keyBindings: keyBindings,
         blacklist: blacklist.replace(regStrip, ""),
-        logLevel: logLevel
+        logLevel: logLevel,
+        offsetX: offsetX,
+        offsetY: offsetY
     };
 
     log("Saving the following settings: " + JSON.stringify(currentSettings), 3);
@@ -238,6 +244,8 @@ function restore_options() {
         document.getElementById("controllerOpacity").value = storage.controllerOpacity;
         document.getElementById("blacklist").value = storage.blacklist;
         document.querySelector("#loggingLevel").value = storage.logLevel;
+        document.getElementById("offset-x").value = storage.offsetX;
+        document.getElementById("offset-y").value = storage.offsetY;
         currentLogLevel = storage.logLevel;
 
         for (let i in storage.keyBindings) {
@@ -291,10 +299,16 @@ function restore_defaults() {
     });
 }
 
-function show_experimental() {
+function toggle_experimental() {
     document
         .querySelectorAll(".experimental")
-        .forEach((item) => (item.style.display = "inline-block"));
+        .forEach((item) => {
+            if (item.style.display === "inline-block" || item.style.display === "") {
+                item.style.display = "none";
+            } else {
+                item.style.display = "inline-block";
+            }
+        });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -303,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("save").addEventListener("click", save_options);
     //document.getElementById("add").addEventListener("click", add_shortcut);
     document.getElementById("restore").addEventListener("click", restore_defaults);
-    document.getElementById("experimental").addEventListener("click", show_experimental);
+    document.getElementById("experimental").addEventListener("click", toggle_experimental);
 
     function eventCaller(event, className, funcName) {
         if (event.target.classList && !event.target.classList.contains(className)) {
@@ -329,14 +343,13 @@ document.addEventListener("DOMContentLoaded", function () {
             event.target.parentNode.remove();
         });
     });
-    /*document.addEventListener("change", (event) => {
-        eventCaller(event, "customDo", function () {
-            if (customActionsNoValues.includes(event.target.value)) {
-                event.target.nextElementSibling.nextElementSibling.disabled = true;
-                event.target.nextElementSibling.nextElementSibling.value = 0;
-            } else {
-                event.target.nextElementSibling.nextElementSibling.disabled = false;
-            }
-        });
-    });*/
+
+    //Listeners for offsets
+    document.getElementById("offset-x").addEventListener("input", (event) => {
+        document.getElementById("offset-x-label").innerText = Number(document.getElementById("offset-x").value);
+    });
+
+    document.getElementById("offset-y").addEventListener("input", (event) => {
+        document.getElementById("offset-y-label").innerText = Number(document.getElementById("offset-y").value);
+    });
 });

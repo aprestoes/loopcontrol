@@ -14,6 +14,8 @@ var lc = {
         controllerOpacity: 0.7, //Default 0.7
         keyBindings: [],
         //version: "0.0.1",
+        offsetX: 0, //The controller offset from its default position along the x-axis
+        offsetY: 0, //The controller offset from its default position along the y-axis
         blacklist: `\
             www.instagram.com
             twitter.com
@@ -197,8 +199,8 @@ function defineVideoController() {
         // are relative to offsetParent, so we adjust for that here. offsetParent
         // can be null if the video has `display: none` or is not yet in the DOM.
         const offsetRect = this.video.offsetParent?.getBoundingClientRect();
-        const top = Math.max(rect.top - (offsetRect?.top || 0), 0) + "px";
-        const left = Math.max(rect.left - (offsetRect?.left || 0), 0) + "px";
+        const top = Math.max(rect.top - (offsetRect?.top || 0), 0) + lc.settings.offsetY + "px";
+        const left = Math.max(rect.left - (offsetRect?.left || 0), 0) + lc.settings.offsetX + "px";
 
         var wrapper = document.createElement("div");
         wrapper.classList.add("vsl-controller");
@@ -870,8 +872,10 @@ function initSettings(storage, isChrome) {
             startHidden: lc.settings.startHidden,
             enabled: lc.settings.enabled,
             controllerOpacity: lc.settings.controllerOpacity,
-            inSeconds: lc.settings.inSeconds,
             blacklist: lc.settings.blacklist.replace(regStrip, ""),
+            logLevel: lc.settings.logLevel,
+            offsetX: lc.settings.offsetX,
+            offsetY: lc.settings.offsetY
         });
     }
     lc.settings.inSeconds = Boolean(storage.inSeconds);
@@ -881,6 +885,8 @@ function initSettings(storage, isChrome) {
     lc.settings.controllerOpacity = Number(storage.controllerOpacity);
     lc.settings.blacklist = String(storage.blacklist);
     lc.settings.logLevel = Number(storage.logLevel);
+    lc.settings.offsetX = Number(storage.offsetX);
+    lc.settings.offsetY = Number(storage.offsetY);
 
     initWhenReady(document);
 }

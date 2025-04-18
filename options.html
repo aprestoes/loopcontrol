@@ -127,11 +127,25 @@
           <option value="4">4 - Full Debugging Messages</option>
         </select>
       </div>
+
+      <div class="row experimental">
+        <label for="offset-x">Offset X:</label>
+        <p>The number in px to offset the video controller from its default location along the x-axis</p>
+        <input type="range" id="offset-x" value="0" min="-50" max="50"></input>
+        <span id="offset-x-label">0</span>
+      </div>
+
+      <div class="row experimental">
+        <label for="">Offset Y:</label>
+        <p>The number in px to offset the video controller from its default location along the y-axis</p>
+        <input type="range" id="offset-y" value="0" min="-50" max="50"></input>
+        <span id="offset-y-label">0</span>
+      </div>
     </section>
 
     <button id="save">Save</button>
     <button id="restore">Restore Defaults</button>
-    <button id="experimental">Show Experimental Features</button>
+    <button id="experimental">Show/Hide Experimental Features</button>
 
     <div id="status"></div>
 
