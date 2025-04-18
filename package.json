@@ -4,7 +4,8 @@
   "description": "Firefox/Chrome extension to loop specified sections of videos. ",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build:firefox": "zip -r 'loopcontrol-firefox.xpi' ./* -x 'tests/*' -x 'node_modules/*'"
   },
   "repository": {
     "type": "git",
