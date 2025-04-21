@@ -1,5 +1,7 @@
 # Loop Control (Video Section Loop)
 
+[![CI Status](https://github.com/aprestoes/loopcontrol/actions/workflows/main.yml/badge.svg)](https://github.com/aprestoes/loopcontrol/actions/workflows/main.yml)
+
 ## What does it do?
 
 This extension loops user-specified sections of videos AND audio (enabled in settings). Instead of looping just from the end back to the beginning of the video, you can loop between any two points. Create a gif-like effect just within your browser!
