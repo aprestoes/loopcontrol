@@ -67,6 +67,7 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 -   [ ] Remember video loop times
 -   [x] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
+-   [ ] 48x48 and 128x128 logos for Chrome store
 
 ## Credit
 
