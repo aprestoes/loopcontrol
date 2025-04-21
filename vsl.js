@@ -904,11 +904,11 @@ function initSettings(storage, isChrome) {
         }); // default: E
         lc.settings.keyBindings.push({
             action: "toggle-loop",
-            key: storage.toggleLoopKeyCode || "t",
+            key: storage.toggleLoopKeyCode || "r",
             value: 0,
             force: false,
             predefined: true,
-        }); // default: T
+        }); // default: R
         lc.settings.keyBindings.push({
             action: "toggle-controller", //Show/hide controller
             key: storage.toggleControllerKeycode || "h",

@@ -13,7 +13,7 @@ var lcDefaults = {
     keyBindings: [
         { action: "set-start", key: "q", value: 0, force: false, predefined: true }, // Q
         { action: "set-end", key: "e", value: 0, force: false, predefined: true }, //E
-        { action: "toggle-loop", key: "t", value: 0, force: false, predefined: true }, //T
+        { action: "toggle-loop", key: "r", value: 0, force: false, predefined: true }, //R
         {
             action: "toggle-controller",
             key: "h",
