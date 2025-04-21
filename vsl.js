@@ -5,7 +5,7 @@ const isChrome = window.chrome ? true : false;
 //TODO: if elements are siblings, assign key listener to video. If not, assign to parent
 var lc = {
     settings: {
-        logLevel: 4, //See log function below. Default: 2
+        logLevel: 2, //See log function below. Default: 2
         audioEnabled: false, //Enable for audio as well as video. Default: true
         //loopEverything: false
         startHidden: false,
@@ -137,7 +137,9 @@ function defineVideoController() {
 
         this.div = this.initControls();
 
-        var observer = new MutationObserver((mutations) => {
+        const previousSrcMap = new WeakMap();
+
+        let observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (
                     mutation.type === "attributes" &&
@@ -145,18 +147,41 @@ function defineVideoController() {
                         mutation.attributeName === "currentSrc")
                 ) {
                     log("mutation of A/V element, src or currentSrc", 4);
+
                     var controller = this.div;
-                    if (!mutation.target.src && !mutation.target.currentSrc) {
-                        controller.classList.add("vsl-nosource");
-                    } else {
-                        controller.classList.remove("vsl-nosource");
+                    if (controller) {
+                        if (!mutation.target.src && !mutation.target.currentSrc) {
+                            controller.classList.add("vsl-nosource");
+                        } else {
+                            controller.classList.remove("vsl-nosource");
+                        }
                     }
 
-                    //TODO: If source changed/no eventListener, then reset controller.
+                    let video = mutation.target;
+                    let newSrc = video.currentSrc;
+
+                    let oldSrc = previousSrcMap.get(video);
+                    if (oldSrc !== newSrc) {
+                        log(`Source changed: ${oldSrc} ➜ ${newSrc}`, 4);
+
+                        previousSrcMap.set(video, newSrc);
+
+                        if (video.vsl) {
+                            video.vsl.remove();
+                            video.vsl = null;
+                        }
+
+                        video.addEventListener("loadedmetadata", function onLoad() {
+                            video.removeEventListener("loadedmetadata", onLoad);
+                            checkForVideo(video, video.parentNode, true);
+                        });
+                    }
                 }
             });
         });
+
         observer.observe(target, {
+            attributes: true,
             attributeFilter: ["src", "currentSrc"],
         });
 
@@ -189,6 +214,22 @@ function defineVideoController() {
 
         delete lc.loopsEnabled[this.video.currentSrc];
     };
+
+    //Reset the controller -> mutation to a different video, reset loop and put controller to default values
+    lc.videoController.prototype.reset = function () {
+        let controller = document.getElementById("controller");
+        let offsetRect = this.video.offsetParent?.getBoundingClientRect();
+        controller.style.top = Math.max(rect.top - (offsetRect?.top || 0), 0) + lc.settings.offsetY + "px";
+        controller.style.left = Math.max(rect.left - (offsetRect?.left || 0), 0) + lc.settings.offsetX + "px";
+
+        resetStart(this.video); //Removes elements from arrays
+        resetEnd(this.video);
+
+        this.video.removeEventListener("timeupdate", lc.handleLoop);
+        this.video.loop = false;
+
+        delete lc.loopsEnabled[this.video.currentSrc];
+    }
 
     lc.videoController.prototype.initControls = function () {
         log("Initializing controls", 4);
@@ -312,6 +353,33 @@ function defineVideoController() {
     };
 }
 
+function checkForVideo(node, parent, added, removal = false) {
+    // Only proceed with supposed removal if node is missing from DOM
+    if (!added && document.body.contains(node) && !removal) {
+        return;
+    }
+    if (
+        node.nodeName === "VIDEO" ||
+        (node.nodeName === "AUDIO" && lc.settings.audioEnabled)
+    ) {
+        if (added) {
+            if (!node.vsl) {
+                node.vsl = new lc.videoController(node, parent);
+            }
+        } else {
+            if (node.vsl) {
+                node.vsl.remove();
+                node.vsl = null;
+            }
+        }
+    } else if (node.children != undefined) {
+        for (var i = 0; i < node.children.length; i++) {
+            const child = node.children[i];
+            checkForVideo(child, child.parentNode || parent, added);
+        }
+    }
+}
+
 function initNow(document) {
     log("initNow started", 4);
 
@@ -321,30 +389,6 @@ function initNow(document) {
         document.body.classList.contains("vsl-initialized")
     ) {
         return;
-    }
-
-    function checkForVideo(node, parent, added) {
-        // Only proceed with supposed removal if node is missing from DOM
-        if (!added && document.body.contains(node)) {
-            return;
-        }
-        if (
-            node.nodeName === "VIDEO" ||
-            (node.nodeName === "AUDIO" && lc.settings.audioEnabled)
-        ) {
-            if (added) {
-                node.vsl = new lc.videoController(node, parent);
-            } else {
-                if (node.vsl) {
-                    node.vsl.remove();
-                }
-            }
-        } else if (node.children != undefined) {
-            for (var i = 0; i < node.children.length; i++) {
-                const child = node.children[i];
-                checkForVideo(child, child.parentNode || parent, added);
-            }
-        }
     }
 
     document.body.classList.add("vsl-initialized");
