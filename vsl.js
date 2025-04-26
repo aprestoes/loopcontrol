@@ -61,24 +61,14 @@ function log(message, logLevel = 5) {
     }
 }
 
-//In keyup events, runAction value is lastInteracted, a vsl
 function runAction(action, value, e) {
-    let targetController;
-
-    if (!value) {
-        let fallback = lc.mediaElements.find(v => !v.classList.contains("vsl-cancelled"));
-        if (fallback) value = fallback.vsl;
-    }
-    
     if (e) {
         //Set correct target depending on click or keypress
-        targetController = value ? value.div : e.target.getRootNode().host; //If keydown use lastInteracted
+        var targetController = value ? value.div : e.target.getRootNode().host; //If keydown use lastInteracted
     }
 
     lc.mediaElements.forEach(function (v) {
         var controller = v.vsl.div;
-
-        if (!controller) return;
 
         if (e && !(targetController == controller)) {
             return;
@@ -112,7 +102,7 @@ function runAction(action, value, e) {
 
             if (action !== "blink") {
                 //So it doesn't blink twice
-                if (action !== "toggle-controller" && e?.type === "keyup")
+                if (action !== "toggle-controller" && e.type === "keyup")
                     tempShowController(controller);
 
                 lc.lastInteracted = v.vsl;
