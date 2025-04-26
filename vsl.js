@@ -174,6 +174,9 @@ function defineVideoController() {
                         video.addEventListener("loadedmetadata", function onLoad() {
                             video.removeEventListener("loadedmetadata", onLoad);
                             checkForVideo(video, video.parentNode, true);
+                            if (lc.mediaElements.length > 0) {
+                                lc.lastInteracted = lc.mediaElements[0].vsl;
+                            }
                         });
                     }
                 }
@@ -454,7 +457,7 @@ function initNow(document) {
                 var item = lc.settings.keyBindings.find((item) => item.key === keyCode);
                 if (item) {
                     //Keys will only work on targeted video. Different behaviour from VSC
-                    runAction(item.action, lc.lastInteracted, event); //runAction(item.action, item.value, event);
+                    runAction(item.action, lc.lastInteracted, event);
                     if (item.force === "true") {
                         // disable websites key bindings
                         event.preventDefault();
@@ -544,6 +547,7 @@ function initNow(document) {
         video.vsl = new lc.videoController(video);
     });
 
+    //console.log("Num mediatags: " + mediaTags.length);
     if (mediaTags.length > 0) {
         lc.lastInteracted = mediaTags[0].vsl;
     }
