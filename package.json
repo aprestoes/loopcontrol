@@ -1,11 +1,12 @@
 {
   "name": "loopcontrol",
-  "version": "0.1.1",
+  "version": "1.0.1",
   "description": "Firefox/Chrome extension to loop specified sections of videos. ",
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build:firefox": "zip -r 'loopcontrol-firefox.xpi' ./* -x 'tests/*' -x 'node_modules/*'"
+    "build:firefox": "cp ./manifests/manifest.v2.json ./manifest.json && web-ext build -a './dist/' -i 'tests' 'manifests'",
+    "start:firefox": "cp ./manifests/manifest.v2.json ./manifest.json && web-ext run --source-dir ./"
   },
   "repository": {
     "type": "git",
@@ -18,12 +19,12 @@
   },
   "homepage": "https://github.com/aprestoes/loopcontrol#readme",
   "devDependencies": {
-    "jes": "^0.6.1",
+    "crx": "^5.0.1",
     "jest": "^29.7.0",
     "jest-puppeteer": "^11.0.0",
-    "puppeteer": "^24.4.0"
+    "puppeteer": "^24.4.0",
+    "web-ext": "^8.6.0"
   },
   "dependencies": {
-    "@mobile-next/jest-chrome": "^1.0.0"
   }
 }

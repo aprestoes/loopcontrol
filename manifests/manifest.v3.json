@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "LoopControl",
     "version": "1.0.1",
     "description": "Loop specific sections of videos with keyboard shortcuts and visual controllers.",
@@ -7,6 +7,16 @@
     "permissions": [
         "storage"
     ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "@aprestoes"
+        }
+    },
     "icons": {
         "32": "icons/icon-32.png"
     },
@@ -37,20 +47,22 @@
             ]
         }
     ],
-    "browser_action": {
+    "action": {
         "default_icon": {
             "16": "icons/icon-16.png",
             "32": "icons/icon-32.png"
         },
         "default_popup": "popup.html"
     },
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "@aprestoes"
-        }
-    },
     "web_accessible_resources": [
-        "inject.css",
-        "shadow.css"
+        {
+            "resources": [
+                "inject.css",
+                "shadow.css"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
     ]
 }
