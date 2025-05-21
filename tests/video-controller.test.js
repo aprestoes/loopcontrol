@@ -285,7 +285,7 @@ describe("Testing keyboard shortcuts", () => {
         expect(returnedEndTime).toBe(convertSecToMin(TEST_LOOP_END));
     });
 
-    test("Loop toggle, T key", async () => {
+    test("Loop toggle, R key", async () => {
         //Get current state
         let originalState = await page.evaluate(() => {
             const videoController = document.querySelector(".vsl-controller");
@@ -301,7 +301,7 @@ describe("Testing keyboard shortcuts", () => {
                 videoController.shadowRoot.querySelector("#toggle-indicator");
             const video = document.querySelector("video");
 
-            video.dispatchEvent(new KeyboardEvent("keyup", { key: "t" }));
+            video.dispatchEvent(new KeyboardEvent("keyup", { key: "r" }));
         });
 
         let newState = await page.evaluate(() => {
