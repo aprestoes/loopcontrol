@@ -36,28 +36,26 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. Add the following to the file `manifest.json` (_id_ value is arbitrary but must be unique):
-
-```JSON
-"browser_specific_settings": {
-    "gecko": {
-      "id": "@aprestoes"
-    }
-  },
-```
-
-4. In Firefox, go to `about:debugging`
-5. Click on This Firefox -> Load Temporary Add-on
-6. Select `manifest.json` within the `loopcontrol-main` folder
+3. Change into the directory with `cd loopcontrol`
+4. Copy the proper manifest version for Firefox with `npm run prepare:firefox`
+5. In Firefox, go to `about:debugging`
+6. Click on This Firefox -> Load Temporary Add-on
+7. Select `manifest.json` within the `loopcontrol-main` folder
 
 ### Chrome Temporary Add-on (For testing purposes)
 
 1. Download this repo as a .zip file
 2. Unzip the file. The folder is `loopcontrol-main`
-3. In Chrome, go to `chrome://extensions`
-4. Enable Developer Mode in the top-right
-5. Click 'Load unpacked extension...'
-6. Select the `loopcontrol-main` folder
+3. Change into the directory with `cd loopcontrol`
+4. Copy the proper manifest version for Chrome with `npm run prepare:chrome`
+5. In Chrome, go to `chrome://extensions`
+6. Enable Developer Mode in the top-right
+7. Click 'Load unpacked extension...'
+8. Select the `loopcontrol-main` folder
+
+About the two manifest versions in ./manifests/: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
+
+Use the following commands: `npm run prerpare:firefox` and `npm run prepare:chrome`
 
 ## Testing
 
@@ -67,7 +65,6 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 ## To-do
 
--   [ ] Remember video loop times
 -   [x] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
 -   [ ] 48x48 and 128x128 logos for Chrome store
 
