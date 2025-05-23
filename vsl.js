@@ -262,10 +262,60 @@ function defineVideoController() {
         });
 
         var shadowURL = isChrome
-            ? chrome.runtime.getURL("shadow.css")
+            ? chrome?.runtime.getURL("shadow.css")
             : browser.runtime.getURL("shadow.css");
+        
+        var styleLink = document.createElement("link");
+        styleLink.rel = "stylesheet";
+        styleLink.href = shadowURL;
 
-        var shadowTemplate = `
+        const controller = document.createElement("div");
+        controller.id = "controller";
+        controller.style.top = top;
+        controller.style.left = left;
+        controller.style.opacity = lc.settings.controllerOpacity;
+
+        const dragSpan = document.createElement("span");
+        dragSpan.className = "draggable drag-indicator";
+        dragSpan.dataset.action = "drag";
+        dragSpan.textContent = "OFF";
+
+        const controlsSpan = document.createElement("span");
+        controlsSpan.id = "controls";
+
+        const startIndicatorBtn = document.createElement("button");
+        startIndicatorBtn.id = "start-indicator";
+        startIndicatorBtn.className = "rw";
+        startIndicatorBtn.dataset.action = "set-start";
+        startIndicatorBtn.textContent = "Start";
+
+        const toSpan = document.createElement("span");
+        toSpan.textContent = " to ";
+
+        const endIndicatorBtn = document.createElement("button");
+        endIndicatorBtn.id = "end-indicator";
+        endIndicatorBtn.className = "rw";
+        endIndicatorBtn.dataset.action = "set-end";
+        endIndicatorBtn.textContent = "End";
+
+        const toggleIndicatorBtn = document.createElement("button");
+        toggleIndicatorBtn.id = "toggle-indicator";
+        toggleIndicatorBtn.className = "hide-button";
+        toggleIndicatorBtn.dataset.action = "toggle-loop";
+        toggleIndicatorBtn.textContent = "OFF";
+
+        const hideIndicatorBtn = document.createElement("button");
+        hideIndicatorBtn.id = "hide-indicator";
+        hideIndicatorBtn.dataset.action = "toggle-controller";
+        hideIndicatorBtn.className = "hide-button";
+        hideIndicatorBtn.textContent = "×";
+
+        controlsSpan.append(startIndicatorBtn, toSpan, endIndicatorBtn, toggleIndicatorBtn, hideIndicatorBtn);
+        controller.append(dragSpan, controlsSpan);
+        shadow.append(styleLink, controller);
+
+
+        /*var shadowTemplate = `
         <style>
             @import "${shadowURL}";
         </style>
@@ -284,7 +334,7 @@ function defineVideoController() {
         `;
         //class hide-button is hidden during blink
 
-        shadow.innerHTML = shadowTemplate;
+        shadow.innerHTML = shadowTemplate;*/
         shadow.querySelector(".draggable").addEventListener(
             "mousedown",
             (e) => {
