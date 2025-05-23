@@ -314,27 +314,6 @@ function defineVideoController() {
         controller.append(dragSpan, controlsSpan);
         shadow.append(styleLink, controller);
 
-
-        /*var shadowTemplate = `
-        <style>
-            @import "${shadowURL}";
-        </style>
-        <div id="controller" style="top:${top}; left:${left}; opacity:${lc.settings.controllerOpacity}">
-            <span data-action="drag" class="draggable drag-indicator">OFF</span>
-            <span id="controls">
-                <button id="start-indicator" class="rw" data-action="set-start">Start</button>
-                <span> to </span>
-                <button id="end-indicator" class="rw" data-action="set-end">End</button>
-                <button id="toggle-indicator" class="hide-button" data-action="toggle-loop">
-                  OFF
-                </button>
-                <button id="hide-indicator" data-action="toggle-controller" class="hide-button">&times;</button>
-            </span>
-        </div>
-        `;
-        //class hide-button is hidden during blink
-
-        shadow.innerHTML = shadowTemplate;*/
         shadow.querySelector(".draggable").addEventListener(
             "mousedown",
             (e) => {
