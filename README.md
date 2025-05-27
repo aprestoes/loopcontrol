@@ -18,13 +18,16 @@ All HTML5 videos will display a moveable and hideable controller that indicates 
 
 You can also manually toggle LoopControl by right-clicking the video and selecting loop.
 
-Default Keybindings (targets the last video controller you interacted with):
-Q - Set loop start
-E - Set loop end
-R - Toggle loop
-H - Hide controller
+**Default Keybindings** (targets the last video controller you interacted with):
+- Q - Set loop start
+- E - Set loop end
+- R - Toggle loop
+- H - Hide controller
 
-**Development is focused primarily on Firefox.**
+**Extension is Chrome/Firefox cross-platform.**
+About the two manifest versions in ./manifests/: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
+
+Use the following commands: `npm run prerpare:firefox` and `npm run prepare:chrome`
 
 ## Installation
 
@@ -52,10 +55,6 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 6. Enable Developer Mode in the top-right
 7. Click 'Load unpacked extension...'
 8. Select the `loopcontrol-main` folder
-
-About the two manifest versions in ./manifests/: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
-
-Use the following commands: `npm run prerpare:firefox` and `npm run prepare:chrome`
 
 ## Testing
 
