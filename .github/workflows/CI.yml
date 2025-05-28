@@ -1,0 +1,99 @@
+name: CI
+
+on:
+    push:
+        branches: ["test/github-actions"]
+        tags:
+          - "v-test-*"
+        paths-ignore:
+          - "**.md"
+          - "**.txt"
+          - "README.md"
+          - "LICENSE"
+    pull_request:
+        branches: ["test/github-actions"]
+        paths-ignore:
+          - "**.md"
+          - "**.txt"
+          - "README.md"
+          - "LICENSE"
+
+jobs:
+    test:
+        name: Run Automated Tests
+        runs-on: ubuntu-latest
+
+        environment: 
+          name: staging
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "22"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Switch to Manifest v2 (Firefox)
+              run: npm run prepare:firefox
+
+            - name: Web-ext Lint
+              uses: kewisch/action-web-ext@v1
+              with:
+                cmd: lint
+                source: .
+                channel: listed
+
+            - name: Run tests
+              run: npm test
+    
+    release:
+      name: Build & Upload to Firefox AMO
+      needs: [test]
+      if: startsWith(github.ref, 'refs/tags/v-test-')
+      runs-on: ubuntu-latest
+      environment:
+        name: production
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Use Node.js
+          uses: actions/setup-node@v3
+          with:
+              node-version: "22"
+
+        - name: Install dependencies
+          run: npm ci
+
+        - name: Switch to Manifest v2 (Firefox)
+          run: npm run prepare:firefox
+
+        - name: Web-ext Build
+          id: web-ext-build
+          uses: kewisch/action-web-ext@v1
+          with:
+            cmd: build
+            source: .
+            artifacts: ./dist/
+            filename: "{name}-{version}.zip"
+            ignoreFiles: '[ "tests", "manifests" ]'
+
+        - name: Web-ext Sign & Upload (AMO)
+          uses: kewisch/action-web-ext@v1
+          with:
+            cmd: sign
+            source: ${{ steps.web-ext-build.outputs.target }}
+            channel: unlisted
+            releaseNotes: "Find more information about recent updates at https://github.com/aprestoes/loopcontrol"
+
+            apiKey: ${{ secrets.AMO_SIGN_KEY }}
+            apiSecret: ${{ secrets.AMO_SIGN_SECRET }}
+            timeout: 900000
+
+
+            
