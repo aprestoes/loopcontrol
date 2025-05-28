@@ -1,6 +1,6 @@
 # Loop Control (Video Section Loop)
 
-[![CI Status](https://github.com/aprestoes/loopcontrol/actions/workflows/main.yml/badge.svg)](https://github.com/aprestoes/loopcontrol/actions/workflows/main.yml)
+[![CI Status](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml/badge.svg)](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml)
 
 ## What does it do?
 
@@ -25,9 +25,10 @@ You can also manually toggle LoopControl by right-clicking the video and selecti
 - H - Hide controller
 
 **Extension is Chrome/Firefox cross-platform.**
-About the two manifest versions in ./manifests/: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
 
-Use the following commands: `npm run prerpare:firefox` and `npm run prepare:chrome`
+About the **two manifest** versions in `./manifests/`: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
+
+Use the following commands: `npm run prerpare:firefox` to switch to **manifest v2** and `npm run prepare:chrome` to switch to **manifest v3**
 
 ## Installation
 

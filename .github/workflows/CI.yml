@@ -2,16 +2,16 @@ name: CI/CD
 
 on:
     push:
-        branches: ["test/github-actions"]
+        branches: ["main"]
         tags:
-          - "v-test-*"
+          - "v-*"
         paths-ignore:
           - "**.md"
           - "**.txt"
           - "README.md"
           - "LICENSE"
     pull_request:
-        branches: ["test/github-actions"]
+        branches: ["main"]
         paths-ignore:
           - "**.md"
           - "**.txt"
@@ -54,7 +54,7 @@ jobs:
     release:
       name: Build & Upload to Firefox AMO
       needs: [test]
-      if: startsWith(github.ref, 'refs/tags/v-test-')
+      if: startsWith(github.ref, 'refs/tags/v-')
       runs-on: ubuntu-latest
       environment:
         name: production
