@@ -4,7 +4,7 @@
   "description": "Firefox/Chrome extension to loop specified sections of videos. ",
   "main": "index.js",
   "scripts": {
-    "version": "npm run prepare:firefox && node scripts/sync-version.js",
+    "version": "npm run prepare:firefox && node scripts/sync-version.js && git add manifest.json manifests/",
     "test": "npm run prepare:chrome && jest",
     "build:firefox": "npm run prepare:firefox && web-ext build -a './dist/' -i 'tests' 'manifests' -n '{name}-{version}-firefox.zip'",
     "start:firefox": "npm run prepare:firefox && web-ext run --source-dir ./",
