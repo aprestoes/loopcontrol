@@ -89,7 +89,7 @@ jobs:
             cmd: sign
             source: ${{ steps.web-ext-build.outputs.target }}
             artifacts: dist
-            channel: unlisted
+            channel: listed
             releaseNotes: "Find more information about recent updates at https://github.com/aprestoes/loopcontrol"
 
             apiKey: ${{ secrets.AMO_SIGN_KEY }}
