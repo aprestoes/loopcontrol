@@ -19,10 +19,10 @@ All HTML5 videos will display a moveable and hideable controller that indicates 
 You can also manually toggle LoopControl by right-clicking the video and selecting loop.
 
 **Default Keybindings** (targets the last video controller you interacted with):
-- Q - Set loop start
-- E - Set loop end
-- R - Toggle loop
-- H - Hide controller
+- <kbd>Q</kbd> - Set loop start
+- <kbd>E</kbd> - Set loop end
+- <kbd>R</kbd> - Toggle loop
+- <kbd>H</kbd> - Hide controller
 
 **Extension is Chrome/Firefox cross-platform.**
 
