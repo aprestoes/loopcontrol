@@ -4,7 +4,7 @@
 
 ## What It Does
 
-**LoopControl** is a browser extension for Chrome and Firefox that lets you loop custom sections of HTML5 videos - not just from the beginning to end. A visual controller overlays all videos, letting you set a start and end point for the loop.
+**LoopControl** is a browser extension for Chrome and Firefox that lets you loop custom sections of videos - not just from the beginning to end. A controller overlays all videos, letting you set a start and end point for the loop.
 
 ## Why Use It?
 
