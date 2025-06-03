@@ -2,13 +2,17 @@
 
 [![CI Status](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml/badge.svg)](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml)
 
-## What does it do?
+## What It Does
 
-This extension loops user-specified sections of videos AND audio (enabled in settings). Instead of looping just from the beginning to the end of a video, you can loop between any two points. Create a gif-like effect just within your browser!
+**LoopControl** is a browser extension for Chrome and Firefox that lets you loop custom sections of videos - not just from the beginning to end. A controller overlays all videos, letting you set a start and end point for the loop.
 
-## Why?
+## Why Use It?
 
-Watching a cooking video/tricky guitar tutorial/play-of-the-game/awesome performance? Use Loop Control to only watch the parts you want.
+- 🪶 Skip the fluff - loop just the part that you care about
+- 🧑‍🍳 Master that recipe, riff, or dance move by repeating important sections
+- 🔁 Turn any video segment into a gif-like loop
+- ⌨️ Utilize the visual controller overlay or keybindings
+- 🔥 Works on virtually any HTML5 video across Chrome and Firefox
 
 ## How?
 
@@ -24,11 +28,15 @@ You can also manually toggle LoopControl by right-clicking the video and selecti
 - <kbd>R</kbd> - Toggle loop
 - <kbd>H</kbd> - Hide controller
 
-**Extension is Chrome/Firefox cross-platform.**
+## Cross-platform Browser Support
 
-About the **two manifest** versions in `./manifests/`: Using manifest v3 in Firefox doesn't properly ask users for the correct permissions (marking them as optional rather than mandatory). Therefore manifest v2 will be used for Firefox and v3 for Chrome/Chromium-based browsers.
+Since 2024, Google deprecated Manifest V2 for Chrome extensions in favour of [Manifest V3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3). So while Firefox supports both Manifest V2 and Manifest V3 extensions, Chrome will only support Manifest V3 moving forward. Among other changes, Manifest V3 was interfering with how Firefox prompted for required permissions. Therefore two different manifests exist in the `./manifests/` folder.
 
-Use the following commands: `npm run prerpare:firefox` to switch to **manifest v2** and `npm run prepare:chrome` to switch to **manifest v3**
+To switch manifest types before testing/building:
+```BASH
+npm run prepare:chrome # Copies Manifest V3
+npm run prepare:firefox # Copies Manifest V2
+```
 
 ## Installation
 
@@ -65,7 +73,6 @@ Install through the official Firefox Add-ons Web Store [link](https://addons.moz
 
 ## To-do
 
--   [x] Switch to Manifest v3 once Firefox Stable implements it. Or make separate repo? Chrome Web Store only accept manifest v3.
 -   [ ] 48x48 and 128x128 logos for Chrome store
 
 ## Credit
