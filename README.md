@@ -1,4 +1,5 @@
 # Loop Control (Video Section Loop)
+[![Firefox AMO](https://extensionworkshop.com/assets/img/documentation/publish/get-the-addon-129x45px.8041c789.png)](https://addons.mozilla.org/en-CA/firefox/addon/loopcontrol)
 
 [![CI Status](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml/badge.svg)](https://github.com/aprestoes/loopcontrol/actions/workflows/CI.yml)
 
