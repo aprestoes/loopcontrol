@@ -9,11 +9,11 @@
 
 ## Why Use It?
 
-- 🪶 Skip the fluff - loop just the part that you care about
-- 🧑‍🍳 Master that recipe, riff, or dance move by repeating important sections
-- 🔁 Turn any video segment into a gif-like loop
-- ⌨️ Utilize the visual controller overlay or keybindings
-- 🔥 Works on virtually any HTML5 video across Chrome and Firefox
+- Skip the fluff - loop just the part that you care about
+- Master that recipe, riff, or dance move by repeating important sections
+- Turn any video segment into a gif-like loop
+- Utilize the visual controller overlay or keybindings
+- Works on virtually any HTML5 video across Chrome and Firefox
 
 ## How?
 
